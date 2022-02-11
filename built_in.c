@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:37:18 by mtournay          #+#    #+#             */
-/*   Updated: 2022/02/10 17:27:24 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/02/11 12:40:00 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft/libft.h"
+
+void	ft_env(char **env)
+{
+	int	i;
+	int	len;
+	
+	i = 0;
+	while (env[i])
+	{
+		len = ft_strlen(env[i]);
+		write(1, env[i], len);
+		write(1, "\n", 1);
+		i++;
+	}
+}
 
 int pwd(char **buf)
 {
@@ -35,7 +50,7 @@ int pwd(char **buf)
 	return (1);
 }
 
-char	*dot_dot(char *buf, char *ret)
+static char	*dot_dot(char *buf, char *ret)
 {
 	int		i;
 	int		j;
@@ -53,7 +68,6 @@ char	*dot_dot(char *buf, char *ret)
 		j++;
 	}
 	ret[j] = '\0';
-	printf("ret = %s\n", ret);
 	return (ret);
 }
 
@@ -66,32 +80,30 @@ int	ft_cd(char *dest)
 		return (0);
 	if (!ft_strncmp(dest, "..", 3))
 	{
-		dot_dot(buf, new_dest);
+		new_dest = dot_dot(buf, new_dest);
 		if (!new_dest)
 			return (0);
 		chdir(new_dest);
+		free(new_dest);
+		free(buf);
 		return (1);
 	}
-	if (chdir(dest) == -1)
-		printf("cd: no such file or directory: %s\n", dest);
+	if (dest[0] == '/')
+	{
+		if (chdir(dest) == -1)
+			printf("cd: no such file or directory: %s\n", dest);
+		free(buf);
+	}
+	else
+	{
+		new_dest = ft_strjoin(buf, dest);
+		if (!new_dest)
+			return (0);
+		if (chdir(dest) == -1)
+			printf("cd: no such file or directory: %s\n", dest);
+		free(new_dest);
+		free(buf);
+	}
 	return (1);
 }
 
-int main(int argc, char **argv)
-{
-	char *buf;
-
-	argc = 0;	
-	if (!pwd(&buf))
-		return (1);
-	printf("%s\n\n", buf);
-	free(buf);
-
-	if (!ft_cd(argv[1]))
-		return (1);
-
-	if (!pwd(&buf))
-		return (1);
-	printf("%s\n", buf);
-	free(buf);
-}
