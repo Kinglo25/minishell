@@ -6,7 +6,7 @@
 /*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:37:18 by mtournay          #+#    #+#             */
-/*   Updated: 2022/02/11 12:40:00 by mtournay         ###   ########.fr       */
+/*   Updated: 2022/02/14 14:13:31 by mtournay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "libft/libft.h"
-
-void	ft_env(char **env)
-{
-	int	i;
-	int	len;
-	
-	i = 0;
-	while (env[i])
-	{
-		len = ft_strlen(env[i]);
-		write(1, env[i], len);
-		write(1, "\n", 1);
-		i++;
-	}
-}
 
 int pwd(char **buf)
 {
@@ -59,7 +44,7 @@ static char	*dot_dot(char *buf, char *ret)
 	i = ft_strlen(buf);
 	while (buf[i] != '/')
 		i--;
-	ret = malloc(sizeof(char) * i + 10);
+	ret = malloc(sizeof(char) * i + 1);
 	if (!ret)
 		return (0);
 	while (j < i)
