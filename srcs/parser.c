@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 15:24:45 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 15:55:09 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,8 @@ static void	set_names_to_null(t_mini *shell)
 	}
 }
 
-static int	create_tab_cmd(t_token *head, t_cmd *cmds)
+static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 {
-	int	i;
-	int	j;
-
-	i = 0;
 	while (head)
 	{
 		cmds[i].av = malloc(sizeof(char *) * (cmds[i].ac + 1));
@@ -103,7 +99,7 @@ int	parser(t_mini *shell, char **input)
 	t_token	*head;
 
 	head = NULL;
-	if (ft_strtok(*input, &head))
+	if (!ft_strtok(*input, &head))
 		return (ft_error("Syntax error\n", 0));
 	shell->nb_cmd = get_nb_cmd(head);
 	shell->cmds = malloc(sizeof(t_cmd) * shell->nb_cmd);
@@ -111,18 +107,18 @@ int	parser(t_mini *shell, char **input)
 		return (0);
 	fill_ac(shell, head);
 	set_names_to_null(shell);
-	create_tab_cmd(head, shell->cmds);
-	int i = 0, j;
-	while (i < shell->nb_cmd)
-	{
-		j = 0;
-		while (shell->cmds[i].av[j])
-		{
-			printf("%s ", shell->cmds[i].av[j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
+	create_tab_cmd(head, shell->cmds, 0, 0);
+	// int i = 0, j;
+	// while (i < shell->nb_cmd)
+	// {
+	// 	j = 0;
+	// 	while (shell->cmds[i].av[j])
+	// 	{
+	// 		printf("%s ", shell->cmds[i].av[j]);
+	// 		j++;
+	// 	}
+	// 	printf("\n");
+	// 	i++;
+	// }
 	return (free_tokens(&head), free_cmds(shell->cmds, shell->nb_cmd));
 }

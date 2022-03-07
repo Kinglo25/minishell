@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 15:28:05 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 15:45:52 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,5 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	shell.envp = envp;
 	shell_loop(&shell, &input);
+	free(shell.envp);
 }

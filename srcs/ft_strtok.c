@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:49:34 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 14:41:13 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 17:55:48 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	check_syntax(t_token *token)
 
 static int	trim_tokens(t_token *head)
 {
-	if (!head && head->type == PIPE)
+	if (head && head->type == PIPE)
 		return (0);
 	while (head)
 	{
@@ -115,11 +115,11 @@ int	ft_strtok(char *str, t_token **head)
 			tmp = str;
 		}
 		else if ((*str == '\"' || *str == '\'') && !find_next_quotes(&str))
-			return (ft_error("Syntax error\n", 0));
+			return (0);
 		else
 			str++;
 	}
 	if (tmp != str)
 		token_add_back(head, create_token(tmp_token, tmp, str - tmp, 1));
-	return (!trim_tokens(*head));
+	return (check_env_var(*head), trim_tokens(*head));
 }
