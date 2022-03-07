@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 14:24:19 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/02 18:41:38 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:11:11 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,6 @@ int	find_next_quotes(char **str)
 		(*str)++;
 	}
 	return (0);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*new;
-	size_t	i;
-
-	if (!s)
-		return (NULL);
-	i = 0;
-	new = malloc(sizeof(*s) * (len + 1));
-	if (!new)
-		return (NULL);
-	new[len] = '\0';
-	while (i < len && start + i < ft_strlen(s))
-	{
-		new[i] = s[start + i];
-		i++;
-	}
-	return (new);
 }
 
 t_token	*last_token(t_token *head)

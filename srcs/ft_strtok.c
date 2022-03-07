@@ -6,19 +6,63 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:49:34 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/02 19:28:57 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 14:41:13 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static char	*remove_unwanted_quotes(char *str)
+{
+	char	*tmp;
+	int		i;
+	int		j;
+	char	quotes;
+
+	tmp = malloc(sizeof(char) * ft_strlen(str) + 1);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			quotes = str[i];
+			i++;
+			while (str[i] && str[i] != quotes)
+				tmp[j++] = str[i++];
+			i++;
+		}
+		else
+			tmp[j++] = str[i++];
+	}
+	tmp[j] = '\0';
+	str = ft_substr(tmp, 0, ft_strlen(tmp));
+	free(tmp);
+	return (str);
+}
+
+static int	check_syntax(t_token *token)
+{
+	if (!token->next && (token->type == PIPE
+			|| token->type == REDIR_OUT || token->type == REDIR_IN))
+		return (0);
+	if ((token->type == REDIR_IN || token->type == REDIR_OUT)
+		&& token->next && token->next->type != OTHER)
+		return (0);
+	if (token->type == PIPE && token->next && token->next->type == PIPE)
+		return (0);
+	return (1);
+}
+
 static int	trim_tokens(t_token *head)
 {
+	if (!head && head->type == PIPE)
+		return (0);
 	while (head)
 	{
-		if (check_syntax(head))
+		if (!check_syntax(head))
 			return (0);
-		remove_quotes(head->data);
+		head->data = remove_unwanted_quotes(head->data);
 		head = head->next;
 	}
 	return (1);
@@ -71,7 +115,7 @@ int	ft_strtok(char *str, t_token **head)
 			tmp = str;
 		}
 		else if ((*str == '\"' || *str == '\'') && !find_next_quotes(&str))
-			return (ft_error("Syntax error\n"));
+			return (ft_error("Syntax error\n", 0));
 		else
 			str++;
 	}

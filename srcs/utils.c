@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:56:08 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/02 14:34:59 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 15:24:27 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,118 @@ void	ft_putstr_fd(char *s, int fd)
 		write(fd, s, ft_strlen(s));
 }
 
-int	ft_error(char *error_msg)
+int	ft_error(char *error_msg, int perror_flag)
 {
-	ft_putstr_fd(error_msg, 2);
+	ft_putstr_fd("Minishell: ", 2);
+	if (perror_flag)
+		perror(error_msg);
+	else
+		ft_putstr_fd(error_msg, 2);
 	return (1);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*s3;
+	size_t	i;
+	size_t	j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	s3 = malloc(sizeof(*s1) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!s3)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i])
+		s3[j++] = s1[i++];
+	i = 0;
+	while (s2[i])
+		s3[j++] = s2[i++];
+	s3[j] = '\0';
+	return (s3);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*new;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	new = malloc(sizeof(*s) * (len + 1));
+	if (!new)
+		return (NULL);
+	new[len] = '\0';
+	while (i < len && start + i < ft_strlen(s))
+	{
+		new[i] = s[start + i];
+		i++;
+	}
+	return (new);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	s_len;
+	void	*new;
+
+	s_len = ft_strlen(s) + 1;
+	new = malloc(s_len);
+	if (!new)
+		return (NULL);
+	return ((char *)ft_memcpy(new, s, s_len));
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+
+	d = dest;
+	s = src;
+	if (dest || src)
+		while (n--)
+			*d++ = *s++;
+	return (dest);
+}
+
+static int	ft_is_in_set(char c, char const *set)
+{
+	size_t	i;
+
+	i = 0;
+	while (set[i])
+	{
+		if (set[i] == c)
+			return (42);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	size_t	start;
+	size_t	end;
+	int		i;
+	char	*new;
+
+	if (!s1 || !set)
+		return (NULL);
+	start = 0;
+	i = 0;
+	end = ft_strlen(s1);
+	while (s1[start] && ft_is_in_set(s1[start], set))
+		start++;
+	while (end > start && ft_is_in_set(s1[end - 1], set))
+		end--;
+	new = malloc(sizeof(*s1) * (end - start + 1));
+	if (!new)
+		return (NULL);
+	while (start < end)
+		new[i++] = s1[start++];
+	new[i] = '\0';
+	return (new);
 }

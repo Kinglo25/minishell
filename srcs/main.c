@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/02 19:28:53 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/07 15:28:05 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ static void	shell_loop(t_mini *shell, char **input)
 	while (1)
 	{
 		*input = readline("Minishell 🐚 ");
-		if (!*input)
-			
 		add_history(*input);
+		*input = ft_strtrim(*input, " ");
+		if (!*input || !**input)
+			continue ;
+		shell->nb_cmd = 0;
 		parser(shell, input);
+		free(*input);
 	}
 }
 
