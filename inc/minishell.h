@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 15:23:40 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/08 13:24:03 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strtrim(char const *s1, char const *set);
+
+// check_env_var.c
+
+int		check_env_var(t_token *token);
 
 #endif

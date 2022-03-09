@@ -6,15 +6,17 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 17:40:47 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 17:54:12 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/09 14:52:40 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+
 
 int	main()
 {
-	printf("%lu\n", strlen(NULL));
+	printf("%s\n", getenv("?"));
 }

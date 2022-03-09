@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:49:34 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 17:55:48 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/09 15:41:06 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,5 @@ int	ft_strtok(char *str, t_token **head)
 	}
 	if (tmp != str)
 		token_add_back(head, create_token(tmp_token, tmp, str - tmp, 1));
-	return (check_env_var(*head), trim_tokens(*head));
+	return (check_env_var(*head) && trim_tokens(*head));
 }
