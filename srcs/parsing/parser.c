@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/09 14:34:30 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/10 17:45:57 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static void	set_names_to_null(t_mini *shell)
 		shell->cmds[i].redir_out.file_name = NULL;
 		shell->cmds[i].redir_out.flags = 0;
 		shell->cmds[i].redir_in.flags = 0;
+		shell->cmds[i].redir_in.doc = NULL;
 		i++;
 	}
 }
@@ -80,7 +81,7 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 				cmds[i].av[j++] = ft_strdup(head->data);
 			else if (head->type == REDIR_IN && redir(&cmds[i].redir_in, head))
 				return (free_cmds(cmds, i + 1));
-			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_in, head))
+			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_out, head))
 				return (free_cmds(cmds, i + 1));
 			if (head->type == REDIR_IN || head->type == REDIR_OUT)
 				head = head->next;
@@ -119,6 +120,13 @@ int	parser(t_mini *shell, char **input)
 		}
 		printf("\n");
 		i++;
+	}
+	printf("d\n");
+	while (shell->cmds->redir_in.doc)
+	{
+		printf("%p\n", shell->cmds->redir_in.doc);
+		printf("%s\n", shell->cmds->redir_in.doc->delimiter);
+		shell->cmds->redir_in.doc = shell->cmds->redir_in.doc->next;
 	}
 	return (free_tokens(&head));
 }

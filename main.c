@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/09 18:38:19 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/10 17:53:53 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,18 @@ static void	shell_loop(t_mini *shell, char **input)
 {
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		shell->nb_cmd = 0;
-		*input = readline("Minishell 🐚 ");
+		*input = readline("Minishell 🐚$ ");
+		if (!*input && write(2, "\b\bexit\n", 7))
+			break ;
 		add_history(*input);
 		*input = ft_strtrim(*input, " ");
 		if (!**input)
 			continue ;
-		if (!*input && write(2, "exit\n", 5))
-			break ;
 		shell->nb_cmd = 0;
-		parser(shell, input);
+		if (parser(shell, input))
+			continue ;
 		free(*input);
 		// here you launch the cmd handler
 		free_cmds(shell->cmds, shell->nb_cmd);

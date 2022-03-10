@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:15:17 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/09 17:52:46 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/10 17:41:05 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@ int	redir(t_red *red, t_token *head)
 
 	if (red->file_name)
 		free(red->file_name);
+	printf("%p\n", red);
 	red->file_name = ft_strdup(head->next->data);
+	printf("%s\n", red->file_name);
 	if (!ft_strncmp(head->data, ">>", 2))
 		red->flags = (O_CREAT | O_APPEND | O_RDWR);
 	else if (!ft_strncmp(head->data, "<<", 2))
-		return (red->flags = -1, 0);
+		return (red->flags = -1, ft_lstadd_back(&red->doc,
+				ft_lstnew(red->file_name)));
 	else if (!ft_strncmp(head->data, ">", 1))
 		red->flags = (O_CREAT | O_TRUNC | O_RDWR);
 	else if (!ft_strncmp(head->data, "<", 1))

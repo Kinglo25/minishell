@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/09 17:59:04 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/10 17:20:38 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,16 @@ typedef struct s_token
 	struct s_token	*next;
 }			t_token;
 
+typedef struct s_here
+{
+	char	*delimiter;
+	void	*next;
+}				t_here;
 typedef struct s_red
 {
 	char	*file_name;
 	int		flags;
+	t_here	*doc;
 }			t_red;
 
 typedef struct s_cmd
@@ -87,6 +93,12 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strtrim(char const *s1, char const *set);
+void	*ft_calloc(size_t nmemb, size_t size);
+void	ft_bzero(void *s, size_t n);
+void	*ft_memset(void *s, int c, size_t n);
+t_here	*ft_lstnew(void *content);
+int		ft_lstadd_back(t_here **lst, t_here *new);
+t_here	*ft_lstlast(t_here *lst);
 
 // check_env_var.c
 

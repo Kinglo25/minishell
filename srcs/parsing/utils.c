@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:56:08 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/07 15:24:27 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/10 17:20:39 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,4 +156,67 @@ char	*ft_strtrim(char const *s1, char const *set)
 		new[i++] = s1[start++];
 	new[i] = '\0';
 	return (new);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*calloc;
+
+	if (nmemb == 0 || size == 0)
+	{
+		nmemb = 1;
+		size = 1;
+	}
+	calloc = malloc(nmemb * size);
+	if (!calloc)
+		return (NULL);
+	ft_bzero(calloc, nmemb * size);
+	return (calloc);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*ptr;
+
+	ptr = s;
+	while (n--)
+		*ptr++ = c;
+	return (s);
+}
+
+t_here	*ft_lstnew(void *content)
+{
+	t_here	*new;
+
+	new = malloc(sizeof(t_here *));
+	if (!new)
+		return (NULL);
+	new->delimiter = content;
+	new->next = NULL;
+	return (new);
+}
+
+int	ft_lstadd_back(t_here **lst, t_here *new)
+{
+	if (!*lst)
+		*lst = new;
+	else
+		ft_lstlast(*lst)->next = new;
+	return (0);
+}
+
+t_here	*ft_lstlast(t_here *lst)
+{
+	while (lst)
+	{
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
 }
