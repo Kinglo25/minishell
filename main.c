@@ -6,11 +6,48 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/09 17:27:50 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/09 18:38:19 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	free_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+		free(env[i++]);
+	free(env);
+	return ;
+}
+
+static char	**malloc_envp(char **envp, int i)
+{
+	char	**new;
+
+	while (envp[i])
+		i++;
+	new = malloc(sizeof(char *) * i + 1);
+	if (!new)
+		return (NULL);
+	new[i] = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		new[i] = ft_strdup(envp[i]);
+		if (!new[i])
+		{
+			while (i--)
+				free(new[i]);
+			free(new);
+			return (NULL);
+		}
+		i++;
+	}
+	return (new);
+}
 
 static void	shell_loop(t_mini *shell, char **input)
 {
@@ -41,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	shell.envp = envp;
+	shell.env = malloc_envp(envp, 0);
 	shell_loop(&shell, &input);
-	free(shell.envp);
+	free_env(shell.env);
 }

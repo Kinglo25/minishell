@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/08 13:24:03 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/09 17:59:04 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_cmd
 typedef struct s_mini
 {
 	t_cmd	*cmds;
-	char	**envp;
+	char	**env;
 	int		nb_cmd;
 }			t_mini;
 
