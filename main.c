@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/10 17:53:53 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 13:10:01 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,33 @@ static char	**malloc_envp(char **envp, int i)
 	return (new);
 }
 
+void	signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+		g_exit_status = 130;
+	}
+}
+
 static void	shell_loop(t_mini *shell, char **input)
 {
 	while (1)
 	{
-		signal(SIGQUIT, SIG_IGN);
 		shell->nb_cmd = 0;
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, signal_handler);
 		*input = readline("Minishell 🐚$ ");
+		signal(SIGQUIT, SIG_IGN);
 		if (!*input && write(2, "\b\bexit\n", 7))
 			break ;
-		add_history(*input);
 		*input = ft_strtrim(*input, " ");
 		if (!**input)
 			continue ;
+		add_history(*input);
 		shell->nb_cmd = 0;
 		if (parser(shell, input))
 			continue ;
@@ -80,6 +94,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	input = NULL;
+	rl_bind_key('\t', rl_complete);
 	shell.env = malloc_envp(envp, 0);
 	shell_loop(&shell, &input);
 	free_env(shell.env);

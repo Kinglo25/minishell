@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/10 17:20:38 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 13:04:00 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/stat.h>
 
 # define OTHER 0
 # define PIPE 1
 # define REDIR_IN 2
 # define REDIR_OUT 3
 # define SPACE 4
+
+int	g_exit_status;
 
 typedef struct s_token
 {
@@ -97,7 +101,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
 t_here	*ft_lstnew(void *content);
-int		ft_lstadd_back(t_here **lst, t_here *new);
+void	ft_lstadd_back(t_here **lst, t_here *new);
 t_here	*ft_lstlast(t_here *lst);
 
 // check_env_var.c

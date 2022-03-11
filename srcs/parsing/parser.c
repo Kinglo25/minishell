@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/10 17:45:57 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 12:32:03 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,24 +109,5 @@ int	parser(t_mini *shell, char **input)
 	fill_ac(shell, head);
 	set_names_to_null(shell);
 	create_tab_cmd(head, shell->cmds, 0, 0);
-	int i = 0, j;
-	while (i < shell->nb_cmd)
-	{
-		j = 0;
-		while (shell->cmds[i].av[j])
-		{
-			printf("%s ", shell->cmds[i].av[j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	printf("d\n");
-	while (shell->cmds->redir_in.doc)
-	{
-		printf("%p\n", shell->cmds->redir_in.doc);
-		printf("%s\n", shell->cmds->redir_in.doc->delimiter);
-		shell->cmds->redir_in.doc = shell->cmds->redir_in.doc->next;
-	}
 	return (free_tokens(&head));
 }

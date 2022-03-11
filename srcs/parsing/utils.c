@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:56:08 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/10 17:20:39 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 12:20:43 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ t_here	*ft_lstnew(void *content)
 {
 	t_here	*new;
 
-	new = malloc(sizeof(t_here *));
+	new = malloc(sizeof(t_here));
 	if (!new)
 		return (NULL);
 	new->delimiter = content;
@@ -201,13 +201,12 @@ t_here	*ft_lstnew(void *content)
 	return (new);
 }
 
-int	ft_lstadd_back(t_here **lst, t_here *new)
+void	ft_lstadd_back(t_here **lst, t_here *new)
 {
 	if (!*lst)
 		*lst = new;
 	else
 		ft_lstlast(*lst)->next = new;
-	return (0);
 }
 
 t_here	*ft_lstlast(t_here *lst)
