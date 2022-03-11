@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/11 13:04:00 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 13:33:05 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int		parser(t_mini *shell, char **input);
 int		redir(t_red *red, t_token *head);
 int		free_cmds(t_cmd *cmds, int nb_cmd);
 int		free_tokens(t_token **head);
+void	rl_replace_line(const char *text, int clear_undo);
 
 // ft_str_tok.c
 

@@ -25,7 +25,7 @@ all:			$(OBJS) $(NAME)
 
 $(NAME):	$(OBJS)
 				@echo "Linking $^"
-				@cc $(CFLAGS) -lft -lreadline -L/Users/lmajerus/.brew/opt/readline/lib -ltermcap $^ -o $@ 
+				@cc $(CFLAGS) -lreadline -L/Users/lmajerus/.brew/opt/readline/lib -I/Users/lmajerus/.brew/opt/include/readline/ -ltermcap $^ -o $@ 
 				@echo "Executable created!"
 clean:
 				@echo "Cleaning objects..."
