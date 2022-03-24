@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/11 13:41:11 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/11 17:25:59 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	input = NULL;
-	rl_bind_key('\t', rl_complete);
 	shell.env = malloc_envp(envp, 0);
 	shell_loop(&shell, &input);
 	free_env(shell.env);
