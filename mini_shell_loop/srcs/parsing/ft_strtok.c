@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:49:34 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 15:46:45 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/28 16:13:05 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*remove_unwanted_quotes(char *str, int i, int j)
 
 	tmp = malloc(sizeof(char) * ft_strlen_2(str) + 1);
 	if (!tmp)
-		return (exit(1));
+		exit(1);
 	while (str[i])
 	{
 		if (str[i] == '\'' || str[i] == '\"')
@@ -119,5 +119,5 @@ int	ft_strtok(char *str, t_token **head, t_mini *shell)
 	}
 	if (tmp != str)
 		token_add_back(head, create_token(tmp_token, tmp, str - tmp, 1));
-	return (check_env_var(*head, shell) && trim_tokens(*head));
+	return (check_env_var(*head, shell, 0) && trim_tokens(*head));
 }

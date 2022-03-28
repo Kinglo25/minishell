@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 14:27:49 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/28 16:14:22 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ char	*ft_getenv(char *str, char **env);
 
 // check_env_var.c
 
-int		check_env_var(t_token *token, t_mini *shell);
-
+int		check_env_var(t_token *token, t_mini *shell, int i);
 int		exe(t_mini *shell);
 
 #endif

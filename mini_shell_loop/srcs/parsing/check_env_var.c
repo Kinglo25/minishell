@@ -6,7 +6,7 @@
 /*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:13:21 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 15:54:17 by lmajerus         ###   ########.fr       */
+/*   Updated: 2022/03/28 16:12:52 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,10 @@ static char	*get_env_var(char *str, int strlen, int i, t_mini *shell)
 	return (new);
 }
 
-int	check_env_var(t_token *t, t_mini *shell)
+int	check_env_var(t_token *t, t_mini *shell, int i)
 {
-	int	i;
-
 	while (t)
 	{
-		i = 0;
 		while (t->type == OTHER && t->data[i])
 		{
 			if (t->data[i] == '\"' && ++i)
@@ -109,8 +106,9 @@ int	check_env_var(t_token *t, t_mini *shell)
 			if (t->data[i] == '\'' && ++i)
 				while (t->data[i] != '\'' && t->data[i])
 					i++;
-			if (t->data[i] == '$' && t->data[i]
-				&& t->data[i] != ' ' && t->data[i] != '?')
+			if (t->data[i] == '$' && t->data[i] && t->data[i + 1] != '\"'
+				&& t->data [i + 1] != '\'' && t->data[i + 1] != ' '
+				&& t->data[i + 1] != '?')
 				t->data = get_env_var(t->data, ft_strlen_2(t->data), 0, shell);
 			if (t->data == NULL)
 				return (0);
