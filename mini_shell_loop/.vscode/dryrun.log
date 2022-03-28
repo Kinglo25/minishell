@@ -1,0 +1,41 @@
+make: Entering directory 'd:/vsc_42cursus/mini_shell_loop'
+echo "Compiling main.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ main.c -o main.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/parser.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/parser.c -o srcs/parsing/parser.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/ft_strtok.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/ft_strtok.c -o srcs/parsing/ft_strtok.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/ft_strtok_utils.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/ft_strtok_utils.c -o srcs/parsing/ft_strtok_utils.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/utils.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/utils.c -o srcs/parsing/utils.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/parser_utils.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/parser_utils.c -o srcs/parsing/parser_utils.o
+echo "Compiling OK!"
+echo "Compiling srcs/parsing/check_env_var.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/parsing/check_env_var.c -o srcs/parsing/check_env_var.o
+echo "Compiling OK!"
+echo "Compiling srcs/exec/builtins.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/exec/builtins.c -o srcs/exec/builtins.o
+echo "Compiling OK!"
+echo "Compiling srcs/exec/exec.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/exec/exec.c -o srcs/exec/exec.o
+echo "Compiling OK!"
+ 
+echo "Compiling srcs/exec/pipes.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/exec/pipes.c -o srcs/exec/pipes.o
+echo "Compiling OK!"
+echo "Compiling srcs/exec/utils.c"
+gcc -Wall -Wextra -Werror  -g3  -c -I./inc/ srcs/exec/utils.c -o srcs/exec/utils.o
+echo "Compiling OK!"
+make all -s -C ./libft
+echo "Linking main.o srcs/parsing/parser.o srcs/parsing/ft_strtok.o srcs/parsing/ft_strtok_utils.o srcs/parsing/utils.o srcs/parsing/parser_utils.o srcs/parsing/check_env_var.o srcs/exec/builtins.o srcs/exec/exec.o srcs/exec/pipes.o srcs/exec/utils.o"
+cc -Wall -Wextra -Werror  -g3  ./libft/libft.a -lreadline -L/Users//.brew/opt/readline/lib -I/Users//.brew/opt/include/readline/ -ltermcap main.o srcs/parsing/parser.o srcs/parsing/ft_strtok.o srcs/parsing/ft_strtok_utils.o srcs/parsing/utils.o srcs/parsing/parser_utils.o srcs/parsing/check_env_var.o srcs/exec/builtins.o srcs/exec/exec.o srcs/exec/pipes.o srcs/exec/utils.o -o minishell 
+echo "Executable created!"
+make: Leaving directory 'd:/vsc_42cursus/mini_shell_loop'
+ 
