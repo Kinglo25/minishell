@@ -13,6 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
+int g_es = 0;
 
 static void	free_env(char **env)
 {
@@ -71,7 +72,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler);
 		*input = readline("Minishell 🐚$ ");
-		if ((!*input) && write(2, "\b\bexit\n", 7))
+		if (!*input) // avant : if ((!*input) && write(2, "\b\bexit\n", 7))
 			break ;
 		if (!**input)
 			continue ;

@@ -26,9 +26,8 @@
 # define PIPE 1
 # define REDIR_IN 2
 # define REDIR_OUT 3
-# define SPACE 4
 
-int		g_es;
+extern int		g_es;
 
 typedef struct s_token
 {

@@ -81,17 +81,17 @@ static int	identify_type(char *str, t_token *tmp)
 	if (!ft_strncmp_2(str, "<", 1))
 		return (tmp->type_size = 1, REDIR_IN);
 	if (!ft_strncmp_2(str, "\t", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, "\n", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, "\r", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, "\v", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, "\f", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, " ", 1))
-		return (tmp->type_size = 1, SPACE);
+		return (tmp->type_size = 1, 4);
 	return (tmp->type_size = 0, OTHER);
 }
 
@@ -108,7 +108,7 @@ int	ft_strtok(char *str, t_token **head, t_mini *shell)
 			token_add_back(head, create_token(tmp_token, tmp, str - tmp, 1));
 		if (tmp_token.type)
 		{
-			if (tmp_token.type != SPACE)
+			if (tmp_token.type != 4)
 				token_add_back(head,
 					create_token(tmp_token, str, tmp_token.type_size, 0));
 			str += tmp_token.type_size;

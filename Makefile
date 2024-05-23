@@ -10,73 +10,72 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	minishell
+NAME        = minishell
 
-PARS		=	main.c \
-				parsing/parser.c \
-				parsing/ft_strtok.c \
-				parsing/ft_strtok_utils.c \
-				parsing/utils.c \
-				parsing/parser_utils.c \
-				parsing/check_env_var.c \
-				parsing/check_env_var_utils.c \
-				parsing/bin_check.c 
+PARS        = main.c \
+              parsing/parser.c \
+              parsing/ft_strtok.c \
+              parsing/ft_strtok_utils.c \
+              parsing/utils.c \
+              parsing/parser_utils.c \
+              parsing/check_env_var.c \
+              parsing/check_env_var_utils.c \
+              parsing/bin_check.c 
 
-EXE			=	exec/handle_bin.c\
-				exec/pipes.c \
-				exec/heredoc.c \
-				exec/utils.c \
-				exec/utils_2.c
+EXE         = exec/handle_bin.c \
+              exec/pipes.c \
+              exec/heredoc.c \
+              exec/utils.c \
+              exec/utils_2.c
 
-BIN			=	builtins/echo.c \
-				builtins/cd.c \
-				builtins/export.c \
-				builtins/export_utils.c \
-				builtins/unset.c \
-				builtins/pwd_env_exit.c \
-				builtins/utils.c \
-				builtins/utils_2.c \
-				builtins/utils_3.c \
-				builtins/utils_4.c 
-				
-LIBFT		= ./libft/
+BIN         = builtins/echo.c \
+              builtins/cd.c \
+              builtins/export.c \
+              builtins/unset.c \
+              builtins/env.c \
+              builtins/exit.c \
+              builtins/pwd.c \
+              builtins/utils.c \
+              builtins/utils_2.c \
+              builtins/utils_3.c \
+              builtins/utils_4.c 
+              
+LIBFT       = ./libft/
 
-NAMELFT		= ./libft/libft.a
+NAMELFT     = ./libft/libft.a
 
-OBJS		=	$(PARS:c=o) $(EXE:c=o) $(BIN:c=o)
+OBJS        = $(PARS:.c=.o) $(EXE:.c=.o) $(BIN:.c=.o)
 
-CC			=	gcc
+CC          = gcc
 
-CFLAGS		=	-Wall -Wextra -Werror  -g3 \
-				-fsanitize=address -g
+CFLAGS      = -Wall -Wextra -g3
 
-INC			= 	-I./inc/
+INC         = -I./inc/
 
+all:        $(OBJS) $(NAME)
 
-all:			$(OBJS) $(NAME)
+%.o: %.c
+	@echo "Compiling $<"
+	@$(CC) $(CFLAGS) -c $(INC) $< -o $(<:.c=.o)
+	@echo "Compiling OK!"
 
-%.o:		%.c
-				@echo "Compiling $<"
-				@$(CC) $(CFLAGS) -c $(INC) $< -o $(<:c=o)
-				@echo "Compiling OK!"
-
-$(NAME):	$(OBJS)
-				@make all -s -C ./libft
-				@echo "Linking $^"
-				@cc $(CFLAGS) ${NAMELFT} -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/include/readline/ -ltermcap $^ -o $@ 
-				@echo "Executable created!"
+$(NAME): $(OBJS)
+	@make -C ./libft
+	@echo "Linking $^"
+	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -ltermcap -o $@
+	@echo "Executable created!"
 
 clean:
-				@echo "Cleaning objects..."
-				@rm -f $(OBJS) $(BONUS_OBJS)
-				@echo "Cleaned up!"
+	@echo "Cleaning objects..."
+	@rm -f $(OBJS)
+	@echo "Cleaned up!"
 
-fclean:		clean
-				@make fclean -s -C ./libft
-				@echo "Removing executable..."
-				@rm -f $(NAME)
-				@echo "Removed!"
+fclean: clean
+	@make fclean -C ./libft
+	@echo "Removing executable..."
+	@rm -f $(NAME)
+	@echo "Removed!"
 
-re:			fclean all
+re: fclean all
 
-.PHONY:		all clean fclean re
+.PHONY: all clean fclean re

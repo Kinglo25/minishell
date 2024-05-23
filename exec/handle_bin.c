@@ -30,6 +30,7 @@ int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 {
 	t_pipes	p;
 
+	// printf("BIN SOLO\n"); //debug
 	p.f_in = 0;
 	p.f_out = 1;
 	ft_minimize(&cmd);
@@ -45,7 +46,7 @@ int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 	if (!ncmp(cmd[0], "unset", 5))
 		return (ft_unset(env, cmd));
 	if (!ncmp(cmd[0], "exit", 4))
-		return (ft_exit(cmd));
+		ft_exit(cmd);
 	if (!ncmp(cmd[0], "env", 3))
 		return (ft_env(*env, cmd, p));
 	return (0);
@@ -53,6 +54,7 @@ int	ft_bin_solo(char **cmd, char ***env, t_here *doc)
 
 int	ft_bin(char ***env, char **cmd, t_pipes p)
 {
+	// printf("BIN\n"); //debug
 	ft_minimize(&cmd);
 	if (!ncmp(cmd[0], "echo", 4))
 		return (ft_echo(cmd));
@@ -67,7 +69,7 @@ int	ft_bin(char ***env, char **cmd, t_pipes p)
 	if (!ncmp(cmd[0], "env", 3))
 		return (ft_env(*env, cmd, p));
 	if (!ncmp(cmd[0], "exit", 4))
-		return (ft_exit(cmd));
+		ft_exit(cmd);
 	return (8);
 }
 

@@ -14,71 +14,57 @@
 #include "builtins.h"
 #include "exec.h"
 
-typedef struct s_var
+int ft_check_n(char *str)
 {
-	int	i;
-	int	j;
-	int	k;
-	int	f;
-	int	len;
-}				t_var;
+  int i;
 
-static void	init(t_var *v)
-{
-	(*v).f = 0;
-	(*v).j = 0;
-	(*v).i = 0;
-	(*v).k = 1;
-	(*v).len = 0;
+  if (!str || str[0] != '-')
+    return (0);
+  i = 1;
+  while (str[i])
+  {
+    if (str[i] != 'n')
+      return (0);
+    i++;
+  }
+  return (1);
 }
 
-void	nl_convert(char ***s)
+int ft_echo(char **cmd)
 {
-	int		i;
+  int i;
+  int j;
+  int n;
 
-	i = 0;
-	while ((*s)[i])
-	{
-		nl_convert_process(&(*s)[i]);
-		i++;
-	}
-}
-
-static int	echo_process(t_var *v, char **cmd)
-{
-	if (!ncmp(cmd[1 + (*v).f], "-", 1))
-		(*v).k++;
-	if (!cmd[(*v).f + (*v).k])
-	{
-		if (!(*v).f)
-			write(1, "\n", 1);
-		return (1);
-	}
-	return (0);
-}
-
-int	ft_echo(char **cmd)
-{
-	t_var	v;
-
-	init(&v);
-	nl_convert(&cmd);
-	if (cmd[1])
-		if (!ncmp(cmd[1], "-n", 2))
-			v.f = 1;
-	if (cmd[v.f + 1])
-	{
-		if (echo_process(&v, cmd))
-			return (1);
-		while (cmd[v.f + v.k])
-		{
-			ft_putstr_fd(cmd[v.f + v.k], 1);
-			if (cmd[v.f + v.k + 1])
-				write(1, " ", 1);
-			v.k++;
-		}
-	}
-	if (!v.f)
-		write(1, "\n", 1);
-	return (1);
+  // printf("in: %s\n", cmd[1]); //debug
+  if (!cmd[1])
+  {
+    write(1, "\n", 1);
+    return (0);
+  }
+  n = 0;
+  while (ft_check_n(cmd[n + 1]))
+    n++;
+  i = 1 + n;
+  while (cmd[i])
+  {
+    j = 0;
+    while (cmd[i][j])
+    {
+      if (cmd[i][j] == '\\' && cmd[i][j + 1] == '\\' && cmd[i][j + 2] == 'n')
+	    {
+	    	write(1, "\n", 1);
+	      j += 2;
+	    }
+      else
+        write(1, &cmd[i][j], 1);
+      j++;
+    }
+    if (cmd[i + 1])
+      write(1, " ", 1);
+    i++;
+  }
+  if (!n)
+    write(1, "\n", 1);
+  return (0);
 }

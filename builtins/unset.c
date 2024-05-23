@@ -1,68 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/05 16:20:41 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/06 18:25:42 by mtournay         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
 
-static int	comp(char *s1, char *s2, int n)
-{
-	if (!s1 || !s2)
-		return (1);
-	while (n--)
-	{
-		if (*s1 != *s2 && !*s2 && *s1 == '=')
-			return (0);
-		if (*s1 != *s2)
-			return (*(unsigned char *)s1 - *(unsigned char *)s2);
-		if (!*s1)
-			return (1);
-		s1++;
-		s2++;
-	}
-	return (1);
-}
-
-static void	ret_malloc(char ***ret, int i)
-{
-	*ret = malloc(sizeof(char *) * i);
-	if (!(*ret))
-		return (exit(0));
-}
-
 int	ft_unset(char ***env, char **cmd)
 {
-	int		i;
-	int		j;
-	char	**ret;
+	int	i;
+	int	j;
+	int	len;
 
-	j = 0;
-	while (cmd[++j])
+	i = 1;
+	while (cmd[i])
 	{
-		i = 0;
-		while ((*env)[i])
-			i++;
-		ret_malloc(&ret, i);
-		i = -1;
-		while (comp((*env)[++i], cmd[j], ft_strlen(cmd[1]) + 1) && (*env)[i])
-			ret[i] = (*env)[i];
-		if (!(*env)[i])
-			return (free(ret), 1);
-		free((*env)[i]);
-		while ((*env)[++i])
-			ret[i - 1] = (*env)[i];
-		ret[i - 1] = NULL;
-		free(*env);
-		*env = ret;
+		len = ft_strlen(cmd[i]);
+		j = 0;
+		while ((*env)[j])
+		{
+			if (ft_strlen((*env)[j]) >= len && (*env)[j][len] == '=' && !ft_strncmp(cmd[i], (*env)[j], len))
+			{
+				free((*env)[j]);
+				while ((*env)[j + 1])
+				{
+					(*env)[j] = (*env)[j + 1];
+					j++;
+				}
+				(*env)[j] = NULL;
+				// printf("last = %s\n", (*env)[j]); //debug
+				// printf("%s found and deleted\n", cmd[i]); //debug
+			}
+			j++;
+		}
+		i++;
 	}
 	return (1);
 }
