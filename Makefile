@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cwastche <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/06 18:34:52 by cwastche          #+#    #+#              #
-#    Updated: 2022/04/06 18:34:53 by cwastche         ###   ########.fr        #
+#    Updated: 2024/06/03 16:43:49 by lomajeru         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ OBJS        = $(PARS:.c=.o) $(EXE:.c=.o) $(BIN:.c=.o)
 
 CC          = gcc
 
-CFLAGS      = -Wall -Wextra -g3
+CFLAGS      = -Wall -Wextra -Werror
 
 INC         = -I./inc/
 
@@ -59,7 +59,7 @@ all:        $(OBJS) $(NAME)
 $(NAME): $(OBJS)
 	@make -C ./libft
 	@echo "Linking $^"
-	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -ltermcap -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/include/readline/ -ltermcap -o $@
 	@echo "Executable created!"
 
 clean:

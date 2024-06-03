@@ -18,6 +18,8 @@ void exec_solo(t_mini *shell, t_pipes *p, int i)
         g_es = 1;
     else
         g_es = ft_exec_builtin(shell, i, p->fd_out);
+	if (p->fd_out != 1)
+		close(p->fd_out);
 }
 
 int	ft_exec_builtin(t_mini *shell, int i, int pfd)

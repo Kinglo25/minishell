@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 17:23:42 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 16:19:59 by mtournay         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:18:08 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int ft_echo(char **cmd, int pfd)
   int i;
   int j;
   int n;
-
   // printf("in: %s\n", cmd[1]); //debug
   if (!cmd[1])
   {
