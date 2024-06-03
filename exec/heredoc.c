@@ -1,121 +1,56 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/02 16:49:09 by cwastche          #+#    #+#             */
-/*   Updated: 2022/04/06 16:44:03 by mtournay         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
 
-void	loop_heredoc(t_cmd *cmds, int nb_cmd)
+int handle_heredoc(t_mini *shell, t_pipes *p, int i)
 {
-	int	i;
-	int	fd;
+    t_here  *tmp;
+    int     fd;
 
-	signal(SIGINT, signal_handler2);
-	i = -1;
-	while (++i < nb_cmd)
-	{
-		if (cmds[i].redir_in.doc)
-		{
-			fd = open_heredoc(cmds[i].redir_in.doc);
+    tmp = shell->cmds[i].redir_in.doc;
+    while (tmp)
+    {
+        if (!shell->cmds[i].av[0])
+        {
+            fd = open_heredoc(tmp);
 			close(fd);
-		}
-	}
+        }
+        else
+            p->fd_in = open_heredoc(tmp);
+        tmp = tmp->next;
+    }
+	if (!shell->cmds[i].av[0])
+		exit(0);
+    return (0);
 }
 
-int	find_heredoc(t_cmd *cmds, int nb_cmd)
+int open_heredoc(t_here *doc)
 {
-	int	i;
+    char    *input;
+    int     len;
+    int     fd;
 
-	if (cmds)
-	{
-		i = -1;
-		while (++i < nb_cmd)
-		{
-			if (cmds[i].redir_in.doc)
-				return (1);
-		}
-	}
-	return (0);
-}
-
-int	delim_is_input(char *input, char *delimiter)
-{
-	int	len;
-	int	i;
-
-	len = ft_strlen(input);
-	i = -1;
-	while (++i < len)
-	{
-		if (input[i] != delimiter[i])
-			return (0);
-	}
-	if (!input[i] && !delimiter[i])
-		return (1);
-	return (0);
-}
-
-int	handle_found_delim(t_here **doc, char *input, int *fd)
-{
-	char	*msg;
-
-	msg = ": No such file or directory";
-	if ((*doc)->next == NULL)
-	{
-		free(input);
-		close(*fd);
-		*fd = open("heredoc", O_RDONLY, 0666);
-		if (*fd < 0)
-			error_mess("minishell: ", "heredoc", msg, 1);
-		if (unlink("heredoc"))
-			unlink_error();
-		return (1);
-	}
-	else
-	{
-		*doc = (*doc)->next;
-		close(*fd);
-		*fd = open("heredoc", O_TRUNC | O_WRONLY, 0666);
-		if (*fd < 0)
-			error_mess("minishell: ", "heredoc", NULL, 1);
-	}
-	return (0);
-}
-
-int	open_heredoc(t_here *doc)
-{
-	int		fd;
-	char	*input;
-
+    len = ft_strlen(doc->delimiter) + 1;
 	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
-	signal(SIGINT, SIG_DFL);
-	while (1)
-	{
-		input = readline(">");
-		if (!input)
-		{
-			if (unlink("heredoc"))
-				unlink_error();
+    while (1)
+    {
+        signal(SIGINT, signal_handler_heredoc);
+        input = readline("<");
+        if (!input)
+        {
+            close(fd);
+            unlink("heredoc");
+            exit(1);
+        }
+        if (!ft_strncmp(input, doc->delimiter, len))
+        {
+			free(input);
 			close(fd);
-			exit(0);
+			fd = open("heredoc", O_RDONLY, 0666);
+			unlink("heredoc");
+			return (fd);
 		}
-		if (*input && delim_is_input(input, doc->delimiter))
-		{
-			if (handle_found_delim(&doc, input, &fd))
-				return (fd);
-		}
-		else
-			ft_putendl_fd(input, fd);
-		free(input);
-	}
-	return (0);
+		ft_putendl_fd(input, fd);
+        free(input);
+    }
 }

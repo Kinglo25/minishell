@@ -4,9 +4,9 @@
 
 int	ft_unset(char ***env, char **cmd)
 {
-	int	i;
-	int	j;
-	int	len;
+	int		i;
+	int		j;
+	size_t	len;
 
 	i = 1;
 	while (cmd[i])
@@ -24,12 +24,10 @@ int	ft_unset(char ***env, char **cmd)
 					j++;
 				}
 				(*env)[j] = NULL;
-				// printf("last = %s\n", (*env)[j]); //debug
-				// printf("%s found and deleted\n", cmd[i]); //debug
 			}
 			j++;
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }

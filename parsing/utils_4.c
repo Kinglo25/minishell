@@ -14,34 +14,6 @@
 #include "builtins.h"
 #include "exec.h"
 
-t_here	*ft_lstlast_2(t_here *lst)
-{
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
-
-char	*ft_getenv(char *str, char **env)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = ft_strlen_2(str);
-	while (env[i])
-	{
-		if (!cmp(env[i], str, len + 1))
-			return (ft_substr_2(env[i], len + 1,
-					ft_strlen_2(env[i]) - (len + 1)));
-		i++;
-	}
-	return (NULL);
-}
-
 static size_t	n_len(int n)
 {
 	size_t	i;

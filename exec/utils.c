@@ -14,73 +14,59 @@
 #include "builtins.h"
 #include "exec.h"
 
-void	unlink_error(void)
+void	close_pipe(int *end)
 {
-	error_mess("Minishell:", "Unlink failed", 0, 255);
-	exit(0);
+	if (close(end[0]) == -1)
+	{
+		perror("close");
+		exit(1);
+	}
+	if (close(end[1]) == -1)
+	{
+		perror("close");
+		exit(1);
+	}
 }
 
-void	signal_handler2(int signum)
+
+void	signal_handler_heredoc(int signum)
 {
 	if (signum == SIGINT)
 	{
 		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
-		g_es = 130;
-	}
-}
-
-void	my_dup(int a, int b)
-{
-	int	ret;
-
-	ret = dup2(a, b);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "dup failed", NULL, 1);
+		unlink("heredoc");
 		exit(1);
 	}
 }
 
-void	close_pipe(int *end)
-{
-	int	ret;
 
-	ret = close(end[0]);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "failed to close pipe", NULL, 1);
-		exit(1);
-	}
-	ret = close(end[1]);
-	if (ret == -1)
-	{
-		error_mess("minishell: ", "failed to close pipe", NULL, 1);
-		exit(1);
-	}
-}
-
-char	*ft_cmd_path(char **env, char *cmd)
+char	*ft_cmd_path(char *cmd)
 {
 	int		i;
-	char	**paths;
+	char	**split_path;
+	char	*cmd_path;
+	char	*tmp;
 
-	i = 0;
-	if (cmd[0] == '.' && cmd[1] == '/')
+	if (!access(cmd, F_OK) && !access(cmd, X_OK))
 		return (cmd);
-	while (!ft_strnstr(env[i], "PATH=", 5) && env[i])
-		i++;
-	env[i] = ft_substr(env[i], 6, ft_strlen(env[i]));
-	paths = ft_split(env[i], ':');
-	i = -1;
-	while (paths && paths[++i])
+	split_path = ft_split(getenv("PATH"), ':');
+	if (!split_path)
+		return (cmd);
+	tmp = ft_strjoin("/", cmd);
+	i = 0;
+	while (split_path[i])
 	{
-		paths[i] = ft_strjoin(paths[i], "/");
-		paths[i] = ft_strjoin(paths[i], cmd);
-		if (!access(paths[i], F_OK) && !access(paths[i], X_OK))
-			return (paths[i]);
-		free(paths[i]);
+		cmd_path = ft_strjoin(split_path[i], tmp);
+		if (!access(cmd_path, F_OK) && !access(cmd_path, X_OK))
+		{
+			free(tmp);
+			return (cmd_path);
+		}
+		free(cmd_path);
+		i++;
 	}
-	return (0);
+	free(tmp);
+	return (cmd);
 }

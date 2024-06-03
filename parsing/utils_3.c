@@ -14,36 +14,6 @@
 #include "builtins.h"
 #include "exec.h"
 
-void	*ft_calloc_1(size_t nmemb, size_t size)
-{
-	void	*calloc;
-
-	if (nmemb == 0 || size == 0)
-	{
-		nmemb = 1;
-		size = 1;
-	}
-	calloc = malloc(nmemb * size);
-	if (!calloc)
-		exit(1);
-	ft_bzero_2(calloc, nmemb * size);
-	return (calloc);
-}
-
-void	ft_bzero_2(void *s, size_t n)
-{
-	ft_memset_2(s, 0, n);
-}
-
-void	*ft_memset_2(void *s, int c, size_t n)
-{
-	unsigned char	*ptr;
-
-	ptr = s;
-	while (n--)
-		*ptr++ = c;
-	return (s);
-}
 
 t_here	*ft_lstnew_2(void *content)
 {
@@ -57,10 +27,56 @@ t_here	*ft_lstnew_2(void *content)
 	return (new);
 }
 
+t_here	*ft_lstlast_2(t_here *lst)
+{
+	while (lst)
+	{
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
+}
+
 void	ft_lstadd_back_2(t_here **lst, t_here *new)
 {
 	if (!*lst)
 		*lst = new;
 	else
 		ft_lstlast_2(*lst)->next = new;
+}
+
+int	cmp(char *s1, char *s2, int n)
+{
+	if (!s1 || !s2)
+		return (1);
+	while (n--)
+	{
+		if (*s1 != *s2 && !*s2 && *s1 == '=')
+			return (0);
+		if (*s1 != *s2)
+			return (*(unsigned char *)s1 - *(unsigned char *)s2);
+		if (!*s1)
+			return (1);
+		s1++;
+		s2++;
+	}
+	return (1);
+}
+
+char	*ft_getenv(char *str, char **env)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = ft_strlen_2(str);
+	while (env[i])
+	{
+		if (!cmp(env[i], str, len + 1))
+			return (ft_substr_2(env[i], len + 1,
+					ft_strlen_2(env[i]) - (len + 1)));
+		i++;
+	}
+	return (NULL);
 }

@@ -15,7 +15,7 @@
 #include "exec.h"
 int g_es = 0;
 
-static void	free_env(char **env)
+void	free_env(char **env)
 {
 	int	i;
 
@@ -72,8 +72,8 @@ static void	shell_loop(t_mini *shell, char **input)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler);
 		*input = readline("Minishell 🐚$ ");
-		if (!*input) // avant : if ((!*input) && write(2, "\b\bexit\n", 7))
-			break ;
+		if (!*input)
+			ft_exit(shell, -1);
 		if (!**input)
 			continue ;
 		add_history(*input);
@@ -82,11 +82,11 @@ static void	shell_loop(t_mini *shell, char **input)
 		shell->cmds = NULL;
 		if (parser(shell, input))
 			continue ;
-		if (*input != 0 && !delim_is_input(*input, ""))
+		if (*input && ft_strncmp(*input, "", 2))
 		{
 			free(*input);
-			if (shell->cmds[0].av[0])
-				ft_exec_cmd(shell);
+			ft_exec_cmd(shell);
+			*input = NULL; // Reset input to NULL after execution
 		}
 	}
 	if (shell->nb_cmd > 0)
@@ -104,5 +104,5 @@ int	main(int argc, char **argv, char *envp[])
 	g_es = 0;
 	shell.env = malloc_envp(envp, 0);
 	shell_loop(&shell, &input);
-	free_env(shell.env);
+	return (0);
 }

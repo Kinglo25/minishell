@@ -17,16 +17,17 @@ PARS        = main.c \
               parsing/ft_strtok.c \
               parsing/ft_strtok_utils.c \
               parsing/utils.c \
+              parsing/utils_2.c \
+              parsing/utils_3.c \
+              parsing/utils_4.c \
               parsing/parser_utils.c \
               parsing/check_env_var.c \
-              parsing/check_env_var_utils.c \
-              parsing/bin_check.c 
+              parsing/check_env_var_utils.c
 
-EXE         = exec/handle_bin.c \
-              exec/pipes.c \
+EXE         = exec/builtins.c \
+              exec/exec.c \
               exec/heredoc.c \
-              exec/utils.c \
-              exec/utils_2.c
+              exec/utils.c
 
 BIN         = builtins/echo.c \
               builtins/cd.c \
@@ -34,11 +35,7 @@ BIN         = builtins/echo.c \
               builtins/unset.c \
               builtins/env.c \
               builtins/exit.c \
-              builtins/pwd.c \
-              builtins/utils.c \
-              builtins/utils_2.c \
-              builtins/utils_3.c \
-              builtins/utils_4.c 
+              builtins/pwd.c
               
 LIBFT       = ./libft/
 

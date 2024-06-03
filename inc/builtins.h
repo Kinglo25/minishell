@@ -26,21 +26,12 @@
 # include "minishell.h"
 # include "exec.h"
 
-int		ft_pwd(char **cmd, t_pipes p);
+int		ft_pwd(int pfd);
 int		ft_cd(char **cmd);
-int		ft_echo(char **cmd);
+int		ft_echo(char **cmd, int pfd);
 int		ft_unset(char ***env, char **cmd);
 int		ft_export(char ***env, char **cmd);
-int		ft_env(char **env, char **cmd, t_pipes p);
-void	ft_exit(char **cmd);
-
-int		cmp(char *s1, char *s2, int n);
-int		ncmp(char *s1, char *s2, size_t n);
-int		bin_normalise(char **str);
-
-int		error_mess(char *s, char *mess, char *cmd, int exstat);
-int		bin_cmd(char ***env, char **cmd);
-
-char	*cat_dup(char *dst, char *src);
+int		ft_env(char **env, char **cmd, int pfd);
+void	ft_exit(t_mini *shell, int i);
 
 #endif

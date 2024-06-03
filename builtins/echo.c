@@ -14,7 +14,7 @@
 #include "builtins.h"
 #include "exec.h"
 
-int ft_check_n(char *str)
+static int ft_check_n(char *str)
 {
   int i;
 
@@ -30,7 +30,24 @@ int ft_check_n(char *str)
   return (1);
 }
 
-int ft_echo(char **cmd)
+static void ft_echo_process(char **cmd, int i, int j, int pfd)
+{
+    while (cmd[i][j])
+    {
+      if (cmd[i][j] == '\\' && cmd[i][j + 1] == '\\' && cmd[i][j + 2] == 'n')
+	    {
+	    	write(pfd, "\n", 1);
+	      j += 2;
+	    }
+      else
+        write(pfd, &cmd[i][j], 1);
+      j++;
+    }
+    if (cmd[i + 1])
+      write(pfd, " ", 1);
+}
+
+int ft_echo(char **cmd, int pfd)
 {
   int i;
   int j;
@@ -39,7 +56,7 @@ int ft_echo(char **cmd)
   // printf("in: %s\n", cmd[1]); //debug
   if (!cmd[1])
   {
-    write(1, "\n", 1);
+    write(pfd, "\n", 1);
     return (0);
   }
   n = 0;
@@ -49,22 +66,10 @@ int ft_echo(char **cmd)
   while (cmd[i])
   {
     j = 0;
-    while (cmd[i][j])
-    {
-      if (cmd[i][j] == '\\' && cmd[i][j + 1] == '\\' && cmd[i][j + 2] == 'n')
-	    {
-	    	write(1, "\n", 1);
-	      j += 2;
-	    }
-      else
-        write(1, &cmd[i][j], 1);
-      j++;
-    }
-    if (cmd[i + 1])
-      write(1, " ", 1);
+    ft_echo_process(cmd, i, j, pfd);
     i++;
   }
   if (!n)
-    write(1, "\n", 1);
+    write(pfd, "\n", 1);
   return (0);
 }

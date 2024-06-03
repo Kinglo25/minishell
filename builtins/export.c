@@ -3,22 +3,26 @@
 #include "exec.h"
 
 
-int check_var_exist(char **env, char *str)
+int check_var_exist(char ***env, char *str)
 {
-	int	i;
-	int	len;
+	int		i;
+	size_t	len;
 
 	len = 0;
 	while (str[len] != '=')
 		len++;
 	i = 0;
-	while (env[i])
+	while ((*env)[i])
 	{
-		if (ft_strlen(env[i]) >= len && env[i][len] == '=' && !ft_strncmp(str, env[i], len))
-			return (i);
+		if (ft_strlen((*env)[i]) >= len && (*env)[i][len] == '=' && !ft_strncmp(str, (*env)[i], len))
+		{
+			free((*env)[i]);
+			(*env)[i] = ft_strdup(str);
+			return (1);
+		}
 		i++;
 	}
-	return (-1);
+	return (0);
 }
 
 int	check_var_name(char *str)
@@ -28,15 +32,19 @@ int	check_var_name(char *str)
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 	{
-		error_mess("minishell: export: ", str,": not a valid identifier", 1);
-		return (0);
+		write(2, "minishell: export: ", 19);
+		ft_putstr_fd(str, 2);
+		write(2, ": not a valid identifier\n", 25);
+		return (-1);
 	}
 	while (str[i] != '=' && str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
-			error_mess("minishell: export: ", str,": not a valid identifier", 1);
-			return (0);
+			write(2, "minishell: export: ", 19);
+			ft_putstr_fd(str, 2);
+			write(2, ": not a valid identifier\n", 25);
+			return (-1);
 		}
 		i++;
 	}
@@ -60,7 +68,7 @@ char **env_realloc(char **env, char *var, size_t size)
         if (!new[i])
         {
 			i--;
-            while (i > 0) // free all
+            while (i > 0)
             {
 				free(new[i]);
 				i--;
@@ -80,33 +88,33 @@ char **env_realloc(char **env, char *var, size_t size)
 int	ft_export(char ***env, char **cmd)
 {
 	int	env_count;
+	int	ret;
 	int	i;
-	int	j;
 
 	i = 1;
 	while (cmd[i])
 	{
-		if (check_var_name(cmd[i]))
+		ret = check_var_name(cmd[i]);
+		if (ret == -1)
+			return (1);
+		if (ret == 1)
 		{
-			j = check_var_exist(*env, cmd[i]);
-			if (j != -1)
-			{
-				// printf("%s replaced by %s\n", (*env)[j], cmd[i]); //debug
-				free((*env)[j]);
-				(*env)[j] = ft_strdup(cmd[i]);
-			}
+			if (check_var_exist(env, cmd[i]))
+				return (0);
 			else
 			{
-				// printf("integrated\n"); //debug
 				env_count = 0;
 				while ((*env)[env_count] != NULL) 
 					env_count++;
 				*env = env_realloc(*env, cmd[i], sizeof(char *) * (env_count + 2));
 				if (!*env)
-					exit(0);
+				{
+					perror("env_realloc");
+					exit(1);
+				}
 			}
 		}
 		i++;
 	}
-	return (1);
+	return (0);
 }

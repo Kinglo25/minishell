@@ -100,7 +100,6 @@ static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
 int	parser(t_mini *shell, char **input)
 {
 	t_token		*head;
-	pid_t		pid;
 
 	head = NULL;
 	if (!ft_strtok(*input, &head, shell))
@@ -112,13 +111,5 @@ int	parser(t_mini *shell, char **input)
 	fill_ac(shell, head);
 	set_names_to_null(shell);
 	create_tab_cmd(head, shell->cmds, 0, 0);
-	if (find_heredoc(shell->cmds, shell->nb_cmd) && !shell->cmds[0].av[0])
-	{
-		signal(SIGINT, signal_handler2);
-		pid = fork();
-		if (pid == 0)
-			loop_heredoc(shell->cmds, shell->nb_cmd);
-		waitpid(pid, 0, 0);
-	}
 	return (free_tokens(&head));
 }

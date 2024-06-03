@@ -98,8 +98,6 @@ char	*ft_strdup_2(const char *s);
 void	*ft_memcpy_2(void *dest, const void *src, size_t n);
 char	*ft_strtrim_2(char const *s1, char const *set);
 void	*ft_calloc_2(size_t nmemb, size_t size);
-void	ft_bzero_2(void *s, size_t n);
-void	*ft_memset_2(void *s, int c, size_t n);
 t_here	*ft_lstnew_2(void *content);
 void	ft_lstadd_back_2(t_here **lst, t_here *new);
 t_here	*ft_lstlast_2(t_here *lst);
@@ -114,5 +112,6 @@ int		smlp(char c, int *macro_len);
 
 // main.c
 
+void	free_env(char **env);
 void	signal_handler(int signum);
 #endif
