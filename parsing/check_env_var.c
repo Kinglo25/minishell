@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_env_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:13:21 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 19:02:51 by mtournay         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:34:08 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ int	check_env_var(t_token *t, t_mini *shell, int i)
 			if (t->data[i] == '\'' && ++i)
 				while (t->data[i] != '\'' && t->data[i])
 					i++;
-			if (t->data[i] == '$' && t->data[i] && t->data[i + 1] != ' ')
+			if (t->data[i] && t->data[i] == '$' && t->data[i + 1] != ' '
+				&& t->data[i + 1] != '\0' && t->data[i + 1] != '\"')
 				t->data = get_env_var(t->data, ft_strlen_2(t->data), 0, shell);
 			if (t->data == NULL)
 				return (0);

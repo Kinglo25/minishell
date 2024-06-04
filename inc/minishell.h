@@ -35,6 +35,7 @@ typedef struct s_red
 {
 	char	*file_name;
 	int		flags;
+	int		invalid;
 	t_here	*doc;
 }			t_red;
 

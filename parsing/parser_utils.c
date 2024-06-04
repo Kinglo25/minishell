@@ -6,7 +6,7 @@
 /*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:15:17 by lmajerus          #+#    #+#             */
-/*   Updated: 2024/06/03 16:50:26 by lomajeru         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:34:49 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int	redir(t_red *red, t_token *head)
 	fd = open(red->file_name, red->flags, 0644);
 	if (fd != -1)
 		close(fd);
+	else
+	{
+		red->invalid = 1;
+		perror(red->file_name);
+	}
 	return (0);
 }
 

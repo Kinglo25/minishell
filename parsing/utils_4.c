@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 19:06:35 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 19:06:45 by mtournay         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:36:03 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ char	*ft_itoa2(int n)
 		n /= 10;
 		i--;
 	}
-	return (g_es = 0, str);
+	return (str);
 }
