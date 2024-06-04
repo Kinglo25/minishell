@@ -34,22 +34,21 @@ typedef struct s_pipes
 }				t_pipes;
 
 //builtins.c
-int		ft_exec_builtin(t_mini *shell, int i, int pfd);
+int		ft_exec_builtin(t_mini *shell, int i, int pfd, int solo);
 void	exec_solo(t_mini *shell, t_pipes *p, int i);
 int		ft_isbuiltin(char *cmd);
-
 
 //exec.c
 int		handle_redir(t_mini *shell, t_pipes *p, int i);
 void	ft_exec_cmd(t_mini *shell);
 
 //heredoc.c
-int handle_heredoc(t_mini *shell, t_pipes *p, int i);
-int	open_heredoc(t_here *doc);
+int		handle_heredoc(t_mini *shell, t_pipes *p, int i);
 
 // Utils.c
 void	signal_handler_heredoc(int signum);
 char	*ft_cmd_path(char *cmd);
 void	close_pipe(int *end);
+int		handle_redir(t_mini *shell, t_pipes *p, int i);
 
 #endif

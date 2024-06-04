@@ -2,48 +2,24 @@
 #include "builtins.h"
 #include "exec.h"
 
-int handle_heredoc(t_mini *shell, t_pipes *p, int i)
+static int	process_heredoc(t_here *doc, int fd)
 {
-    t_here  *tmp;
-    int     fd;
+	char	*input;
+	int		len;
 
-    tmp = shell->cmds[i].redir_in.doc;
-    while (tmp)
-    {
-        if (!shell->cmds[i].av[0])
-        {
-            fd = open_heredoc(tmp);
+	len = ft_strlen(doc->delimiter) + 1;
+	while (1)
+	{
+		signal(SIGINT, signal_handler_heredoc);
+		input = readline("<");
+		if (!input)
+		{
 			close(fd);
-        }
-        else
-            p->fd_in = open_heredoc(tmp);
-        tmp = tmp->next;
-    }
-	if (!shell->cmds[i].av[0])
-		exit(0);
-    return (0);
-}
-
-int open_heredoc(t_here *doc)
-{
-    char    *input;
-    int     len;
-    int     fd;
-
-    len = ft_strlen(doc->delimiter) + 1;
-	fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
-    while (1)
-    {
-        signal(SIGINT, signal_handler_heredoc);
-        input = readline("<");
-        if (!input)
-        {
-            close(fd);
-            unlink("heredoc");
-            exit(1);
-        }
-        if (!ft_strncmp(input, doc->delimiter, len))
-        {
+			unlink("heredoc");
+			exit(1);
+		}
+		if (!ft_strncmp(input, doc->delimiter, len))
+		{
 			free(input);
 			close(fd);
 			fd = open("heredoc", O_RDONLY, 0666);
@@ -51,6 +27,30 @@ int open_heredoc(t_here *doc)
 			return (fd);
 		}
 		ft_putendl_fd(input, fd);
-        free(input);
-    }
+		free(input);
+	}
+}
+
+int	handle_heredoc(t_mini *shell, t_pipes *p, int i)
+{
+	t_here	*tmp;
+	int		hd_fd;
+	int		fd;
+
+	tmp = shell->cmds[i].redir_in.doc;
+	while (tmp)
+	{
+		hd_fd = open("heredoc", O_CREAT | O_WRONLY, 0666);
+		if (!shell->cmds[i].av[0])
+		{
+			fd = process_heredoc(tmp, hd_fd);
+			close(fd);
+		}
+		else
+			p->fd_in = process_heredoc(tmp, hd_fd);
+		tmp = tmp->next;
+	}
+	if (!shell->cmds[i].av[0])
+		exit(0);
+	return (0);
 }

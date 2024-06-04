@@ -8,14 +8,15 @@ int	ft_unset(char ***env, char **cmd)
 	int		j;
 	size_t	len;
 
-	i = 1;
-	while (cmd[i])
+	i = 0;
+	while (cmd[++i])
 	{
 		len = ft_strlen(cmd[i]);
-		j = 0;
-		while ((*env)[j])
+		j = -1;
+		while ((*env)[++j])
 		{
-			if (ft_strlen((*env)[j]) >= len && (*env)[j][len] == '=' && !ft_strncmp(cmd[i], (*env)[j], len))
+			if (ft_strlen((*env)[j]) >= len && (*env)[j][len] == '='
+			&& !ft_strncmp(cmd[i], (*env)[j], len))
 			{
 				free((*env)[j]);
 				while ((*env)[j + 1])
@@ -25,9 +26,7 @@ int	ft_unset(char ***env, char **cmd)
 				}
 				(*env)[j] = NULL;
 			}
-			j++;
 		}
-		i++;
 	}
 	return (0);
 }

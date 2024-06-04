@@ -2,8 +2,7 @@
 #include "builtins.h"
 #include "exec.h"
 
-
-int check_var_exist(char ***env, char *str)
+int	check_var_exist(char ***env, char *str)
 {
 	int		i;
 	size_t	len;
@@ -14,7 +13,8 @@ int check_var_exist(char ***env, char *str)
 	i = 0;
 	while ((*env)[i])
 	{
-		if (ft_strlen((*env)[i]) >= len && (*env)[i][len] == '=' && !ft_strncmp(str, (*env)[i], len))
+		if (ft_strlen((*env)[i]) >= len && (*env)[i][len] == '='
+		&& !ft_strncmp(str, (*env)[i], len))
 		{
 			free((*env)[i]);
 			(*env)[i] = ft_strdup(str);
@@ -53,36 +53,32 @@ int	check_var_name(char *str)
 	return (0);
 }
 
-char **env_realloc(char **env, char *var, size_t size)
+char	**env_realloc(char **env, char *var, size_t size)
 {
-    char **new;
-    int i;
+	char	**new;
+	int		i;
 
-    i = 0;
-    new = malloc(size * sizeof(char *));
-    if (!new)
-        return (NULL);
-    while (env[i])
-    {
-        new[i] = ft_strdup(env[i]);
-        if (!new[i])
-        {
+	i = -1;
+	new = malloc(size * sizeof(char *));
+	if (!new)
+		return (NULL);
+	while (env[++i])
+	{
+		new[i] = ft_strdup(env[i]);
+		if (!new[i])
+		{
 			i--;
-            while (i > 0)
-            {
+			while (i-- > 0)
 				free(new[i]);
-				i--;
-			}
-            free(new);
-            return (NULL);
-        }
-        free(env[i]);
-        i++;
-    }
+			free(new);
+			return (NULL);
+		}
+		free(env[i]);
+	}
 	free(env);
 	new[i] = ft_strdup(var);
 	new[i + 1] = NULL;
-    return (new);
+	return (new);
 }
 
 int	ft_export(char ***env, char **cmd)
@@ -91,8 +87,8 @@ int	ft_export(char ***env, char **cmd)
 	int	ret;
 	int	i;
 
-	i = 1;
-	while (cmd[i])
+	i = 0;
+	while (cmd[++i])
 	{
 		ret = check_var_name(cmd[i]);
 		if (ret == -1)
@@ -104,17 +100,12 @@ int	ft_export(char ***env, char **cmd)
 			else
 			{
 				env_count = 0;
-				while ((*env)[env_count] != NULL) 
+				while ((*env)[env_count] != NULL)
 					env_count++;
-				*env = env_realloc(*env, cmd[i], sizeof(char *) * (env_count + 2));
-				if (!*env)
-				{
-					perror("env_realloc");
-					exit(1);
-				}
+				*env = env_realloc(*env, cmd[i], sizeof(char *)
+						* (env_count + 2));
 			}
 		}
-		i++;
 	}
 	return (0);
 }

@@ -45,7 +45,7 @@ OBJS        = $(PARS:.c=.o) $(EXE:.c=.o) $(BIN:.c=.o)
 
 CC          = gcc
 
-CFLAGS      = -Wall -Wextra -Werror
+CFLAGS      = -Wall -Wextra
 
 INC         = -I./inc/
 
@@ -59,7 +59,7 @@ all:        $(OBJS) $(NAME)
 $(NAME): $(OBJS)
 	@make -C ./libft
 	@echo "Linking $^"
-	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/include/readline/ -ltermcap -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -ltermcap -o $@
 	@echo "Executable created!"
 
 clean:

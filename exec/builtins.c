@@ -2,28 +2,33 @@
 #include "builtins.h"
 #include "exec.h"
 
-int ft_isbuiltin(char *cmd)
+int	ft_isbuiltin(char *cmd)
 {
 	if (!cmd)
 		return (0);
-    if (!ft_strncmp(cmd, "echo", 5) || !ft_strncmp(cmd, "cd", 3) || !ft_strncmp(cmd, "pwd", 4) || !ft_strncmp(cmd, "export", 7) || !ft_strncmp(cmd, "unset", 6) || !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "exit", 5))
-        return (1);
-    return (0);
+	if (!ft_strncmp(cmd, "echo", 5) || !ft_strncmp(cmd, "cd", 3)
+		||!ft_strncmp(cmd, "pwd", 4) || !ft_strncmp(cmd, "export", 7)
+		|| !ft_strncmp(cmd, "unset", 6)
+		|| !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "exit", 5))
+		return (1);
+	return (0);
 }
 
-void exec_solo(t_mini *shell, t_pipes *p, int i)
+void	exec_solo(t_mini *shell, t_pipes *p, int i)
 {
-    p->fd_out = 1;
-    if (handle_redir(shell, p, i))
-        g_es = 1;
-    else
-        g_es = ft_exec_builtin(shell, i, p->fd_out);
+	p->fd_out = 1;
+	if (handle_redir(shell, p, i))
+		g_es = 1;
+	else
+		g_es = ft_exec_builtin(shell, i, p->fd_out, 1);
 	if (p->fd_out != 1)
 		close(p->fd_out);
 }
 
-int	ft_exec_builtin(t_mini *shell, int i, int pfd)
+int	ft_exec_builtin(t_mini *shell, int i, int pfd, int solo)
 {
+	if (!solo)
+		pfd = 1;
 	if (!ft_strncmp(shell->cmds[i].av[0], "echo", 5))
 		return (ft_echo(shell->cmds[i].av, pfd));
 	if (!ft_strncmp(shell->cmds[i].av[0], "cd", 3))

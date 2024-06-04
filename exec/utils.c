@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/05 19:14:27 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/06 16:43:59 by mtournay         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
@@ -28,7 +16,6 @@ void	close_pipe(int *end)
 	}
 }
 
-
 void	signal_handler_heredoc(int signum)
 {
 	if (signum == SIGINT)
@@ -41,6 +28,32 @@ void	signal_handler_heredoc(int signum)
 	}
 }
 
+int	handle_redir(t_mini *shell, t_pipes *p, int i)
+{
+	if (shell->cmds[i].redir_in.doc)
+		handle_heredoc(shell, p, i);
+	if (shell->cmds[i].redir_in.file_name)
+	{
+		p->fd_in = open(shell->cmds[i].redir_in.file_name,
+				shell->cmds[i].redir_in.flags);
+		if (p->fd_in < 0)
+		{
+			perror(shell->cmds[i].redir_in.file_name);
+			return (1);
+		}
+	}
+	if (shell->cmds[i].redir_out.file_name)
+	{
+		p->fd_out = open(shell->cmds[i].redir_out.file_name,
+				shell->cmds[i].redir_out.flags);
+		if (p->fd_out < 0)
+		{
+			perror(shell->cmds[i].redir_out.file_name);
+			return (1);
+		}
+	}
+	return (0);
+}
 
 char	*ft_cmd_path(char *cmd)
 {

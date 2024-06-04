@@ -13,6 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
+
 int g_es = 0;
 
 void	free_env(char **env)
@@ -86,7 +87,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		{
 			free(*input);
 			ft_exec_cmd(shell);
-			*input = NULL; // Reset input to NULL after execution
+			*input = NULL;
 		}
 	}
 	if (shell->nb_cmd > 0)
