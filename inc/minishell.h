@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/01 11:44:22 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 19:03:03 by mtournay         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -27,7 +15,7 @@
 # define REDIR_IN 2
 # define REDIR_OUT 3
 
-extern int		g_es;
+extern int	g_es;
 
 typedef struct s_token
 {

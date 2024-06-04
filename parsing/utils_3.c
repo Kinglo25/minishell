@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 19:04:29 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/05 19:06:06 by mtournay         ###   ########.fr       */
+/*   Updated: 2024/06/04 16:19:42 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 #include "exec.h"
-
 
 t_here	*ft_lstnew_2(void *content)
 {
