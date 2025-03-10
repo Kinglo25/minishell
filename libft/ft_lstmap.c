@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.s19.be>         +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/06 16:02:04 by mtournay          #+#    #+#             */
-/*   Updated: 2021/04/21 15:03:22 by mtournay         ###   ########.fr       */
+/*   Created: 2021/02/11 15:29:41 by lmajerus          #+#    #+#             */
+/*   Updated: 2023/10/18 22:25:51 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*start_list;
-	t_list	*pos;
-	t_list	*temp;
+	t_list	*begin;
+	t_list	*new;
+	void	*f_content;
 
-	if (!lst || !f)
+	if (!f || !del)
 		return (NULL);
-	temp = lst;
-	start_list = NULL;
-	while (temp)
+	begin = NULL;
+	while (lst)
 	{
-		pos = ft_lstnew(f(temp->content));
-		if (!pos)
+		f_content = f(lst->content);
+		new = ft_lstnew(f_content);
+		if (!new)
 		{
-			ft_lstclear(&start_list, del);
+			del(f_content);
+			ft_lstclear(&begin, (*del));
 			return (NULL);
 		}
-		ft_lstadd_back(&start_list, pos);
-		temp = temp->next;
+		ft_lstadd_back(&begin, new);
+		lst = lst->next;
 	}
-	return (start_list);
+	return (begin);
 }

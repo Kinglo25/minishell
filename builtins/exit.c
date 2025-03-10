@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:10:54 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:11:00 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/11 00:37:53 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_exit(t_mini *shell, int i)
 			write(2, "minishell: exit: ", 17);
 			ft_putstr_fd(shell->cmds[i].av[1], 2);
 			write(2, ": numeric argument required\n", 28);
-			g_es = 2;
+			g_es = 255;
 		}
 	}
 	else

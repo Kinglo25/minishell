@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:13:19 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:13:28 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:30:59 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,19 @@ int		ft_isbuiltin(char *cmd);
 
 //exec.c
 int		handle_redir(t_mini *shell, t_pipes *p, int i);
-void	ft_exec_cmd(t_mini *shell);
+void	ft_exec_cmd(t_mini *shell, int i, pid_t *pids);
 
 //heredoc.c
 int		handle_heredoc(t_mini *shell, t_pipes *p, int i);
 
+//signals.c
+void	signal_handler_parent(int signum);
+void	signal_handler(int signum);
+
 // Utils.c
+char	*ft_get_env(char *env[], char *str);
 void	signal_handler_heredoc(int signum);
-char	*ft_cmd_path(char *cmd);
+char	*ft_cmd_path(char *cmd, char **env);
 void	close_pipe(int *end);
 int		handle_redir(t_mini *shell, t_pipes *p, int i);
 

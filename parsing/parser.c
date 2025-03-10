@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/01 12:07:30 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/04/05 19:03:42 by mtournay         ###   ########.fr       */
+/*   Created: 2024/06/10 22:35:18 by ssenas-y          #+#    #+#             */
+/*   Updated: 2024/06/10 22:35:19 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static void	fill_ac(t_mini *shell, t_token *head)
 		shell->cmds[i].ac = 0;
 		while (head && head->type != PIPE)
 		{
-			if (head->type == OTHER && prev->type != REDIR_IN
-				&& prev->type != REDIR_OUT)
+			if (head->type == OTHER && prev->type != RED_IN
+				&& prev->type != RED_OUT)
 				shell->cmds[i].ac++;
 			prev = head;
 			head = head->next;
@@ -64,28 +64,30 @@ static void	set_names_to_null(t_mini *shell)
 		shell->cmds[i].redir_out.flags = 0;
 		shell->cmds[i].redir_in.flags = 0;
 		shell->cmds[i].redir_in.doc = NULL;
+		shell->cmds[i].redir_in.invalid = 0;
+		shell->cmds[i].redir_out.invalid = 0;
 		i++;
 	}
 }
 
-static int	create_tab_cmd(t_token *head, t_cmd *cmds, int i, int j)
+static int	create_tab_cmd(t_token *head, t_cmd *c, int i, int j)
 {
 	while (head)
 	{
-		cmds[i].av = malloc(sizeof(char *) * (cmds[i].ac + 1));
-		if (!cmds[i].av)
+		c[i].av = malloc(sizeof(char *) * (c[i].ac + 1));
+		if (!c[i].av)
 			exit(1);
 		j = 0;
-		cmds[i].av[cmds[i].ac] = NULL;
+		c[i].av[c[i].ac] = NULL;
 		while (head && head->type != PIPE)
 		{
 			if (head->type == OTHER)
-				cmds[i].av[j++] = ft_strdup_2(head->data);
-			else if (head->type == REDIR_IN && redir(&cmds[i].redir_in, head))
+				c[i].av[j++] = ft_strdup_2(head->data);
+			else if (head->type == RED_IN && red(&c[i].redir_in, head, c[i]))
 				;
-			else if (head->type == REDIR_OUT && redir(&cmds[i].redir_out, head))
+			else if (head->type == RED_OUT && red(&c[i].redir_out, head, c[i]))
 				;
-			if (head->type == REDIR_IN || head->type == REDIR_OUT)
+			if (head->type == RED_IN || head->type == RED_OUT)
 				head = head->next;
 			if (head)
 				head = head->next;

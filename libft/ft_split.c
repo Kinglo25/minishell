@@ -3,102 +3,88 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.s19.be>         +#+  +:+       +#+        */
+/*   By: lmajerus <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/06 13:43:05 by mtournay          #+#    #+#             */
-/*   Updated: 2021/04/21 19:22:46 by mtournay         ###   ########.fr       */
+/*   Created: 2021/02/11 15:47:13 by lmajerus          #+#    #+#             */
+/*   Updated: 2021/02/11 15:48:46 by lmajerus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_count(char const *s, char c)
+static int	find_nb_str(char const *s, char c)
 {
-	size_t	count;
-	size_t	i;
+	int		i;
+	int		count;
 
-	count = 0;
 	i = 0;
-	if (s[i] != c)
-		count++;
+	count = 0;
 	while (s[i])
 	{
 		while (s[i] == c && s[i])
-		{
-			if (s[i + 1] != c && s[i + 1])
-				count++;
 			i++;
-		}
-		if (s[i])
+		if (s[i] != c && s[i])
+			count++;
+		while (s[i] != c && s[i])
 			i++;
 	}
-	return (count + 1);
+	return (count);
 }
 
-static char	*customdup(const char *s1, size_t start, size_t end)
+static int	find_len_str(char const *s, char c, int i)
 {
-	size_t	i;
-	char	*str;
+	int		len;
 
-	i = 0;
-	str = malloc(sizeof(char) * (end - start + 1));
-	if (str == NULL)
-		return (NULL);
-	while (start < end)
-		str[i++] = s1[start++];
-	str[i] = '\0';
-	return (str);
-}
-
-static char	**freetab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
+	len = 0;
+	while (s[i] && s[i] != c)
 	{
-		free(tab[i]);
 		i++;
+		len++;
 	}
-	free(tab);
-	return (NULL);
+	return (len);
 }
 
-static char	**filltab(char **str, const char *s, char c)
+static int	fill(char const *s, char c, int nb_str, char **split)
 {
-	size_t	i;
-	size_t	j;
-	size_t	k;
+	int		i;
+	int		j;
+	int		k;
 
 	i = 0;
 	j = 0;
-	while (s[i])
+	while (nb_str-- && s[i])
 	{
-		if (s[i] != c)
-		{
-			k = i;
-			while (s[i] != c && s[i])
-				i++;
-			str[j] = customdup(s, k, i);
-			if (str[j] == NULL)
-				return (freetab(str));
-			j++;
-		}
-		if (s[i])
+		while (s[i] == c && s[i])
 			i++;
+		split[j] = malloc(find_len_str(s, c, i) + 1);
+		if (!(split[j]))
+		{
+			while (j--)
+				free(split[j]);
+			free(split);
+			return (42);
+		}
+		k = 0;
+		while (s[i] != c && s[i])
+			split[j][k++] = s[i++];
+		split[j++][k] = '\0';
 	}
-	str[j] = NULL;
-	return (str);
+	return (0);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**str;
+	int		nb_str;
+	char	**split;
 
 	if (!s)
 		return (NULL);
-	str = malloc(sizeof(char *) * (ft_count(s, c)));
-	if (!str)
+	nb_str = find_nb_str(s, c);
+	split = malloc(sizeof(*split) * (nb_str + 1));
+	if (!(split))
 		return (NULL);
-	return (filltab(str, s, c));
+	split[nb_str] = NULL;
+	if (fill(s, c, nb_str, split))
+		return (NULL);
+	return (split);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <ssenas-y@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/01 11:36:29 by lmajerus          #+#    #+#             */
-/*   Updated: 2024/06/04 16:16:16 by ssenas-y         ###   ########.fr       */
+/*   Created: 2024/06/10 22:34:35 by ssenas-y          #+#    #+#             */
+/*   Updated: 2024/06/10 22:34:36 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "builtins.h"
 #include "exec.h"
 
-int g_es = 0;
+int	g_es = 0;
 
 void	free_env(char **env)
 {
@@ -53,18 +53,6 @@ static char	**malloc_envp(char **envp, int i)
 	return (new);
 }
 
-void	signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-		g_es = 130;
-	}
-}
-
 static void	shell_loop(t_mini *shell, char **input)
 {
 	while (1)
@@ -86,7 +74,7 @@ static void	shell_loop(t_mini *shell, char **input)
 		if (*input && ft_strncmp(*input, "", 2))
 		{
 			free(*input);
-			ft_exec_cmd(shell);
+			ft_exec_cmd(shell, -1, 0);
 			*input = NULL;
 		}
 	}
@@ -101,6 +89,7 @@ int	main(int argc, char **argv, char *envp[])
 
 	(void)argc;
 	(void)argv;
+	shell = (t_mini){0};
 	input = NULL;
 	g_es = 0;
 	shell.env = malloc_envp(envp, 0);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+         #
+#    By: ssenas-y <ssenas-y@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/04/06 18:34:52 by cwastche          #+#    #+#              #
-#    Updated: 2024/06/04 16:36:38 by lomajeru         ###   ########.fr        #
+#    Created: 2024/06/10 22:36:16 by ssenas-y          #+#    #+#              #
+#    Updated: 2024/06/11 14:08:25 by ssenas-y         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ PARS        = main.c \
 EXE         = exec/builtins.c \
               exec/exec.c \
               exec/heredoc.c \
+              exec/signals.c \
               exec/utils.c
 
 BIN         = builtins/echo.c \
@@ -35,7 +36,8 @@ BIN         = builtins/echo.c \
               builtins/unset.c \
               builtins/env.c \
               builtins/exit.c \
-              builtins/pwd.c
+              builtins/pwd.c \
+              builtins/utils.c
               
 LIBFT       = ./libft/
 
@@ -59,7 +61,7 @@ all:        $(OBJS) $(NAME)
 $(NAME): $(OBJS)
 	@make -C ./libft
 	@echo "Linking $^"
-	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/include/readline/ -ltermcap -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(NAMELFT) -lreadline -L/Users/$(USER)/homebrew/opt/readline/lib -I/Users/$(USER)/homebrew/opt/include/readline/ -ltermcap -o $@
 	@echo "Executable created!"
 
 clean:

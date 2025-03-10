@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/04 19:46:48 by lomajeru          #+#    #+#             */
+/*   Updated: 2024/06/04 20:44:10 by lomajeru         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -9,11 +21,12 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 
 # define OTHER 0
 # define PIPE 1
-# define REDIR_IN 2
-# define REDIR_OUT 3
+# define RED_IN 2
+# define RED_OUT 3
 
 extern int	g_es;
 
@@ -60,7 +73,7 @@ int		parser(t_mini *shell, char **input);
 
 // parser_utils.c
 
-int		redir(t_red *red, t_token *head);
+int		red(t_red *red, t_token *head, t_cmd c);
 int		free_cmds(t_cmd *cmds, int nb_cmd);
 int		free_tokens(t_token **head);
 void	rl_replace_line(const char *text, int clear_undo);

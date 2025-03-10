@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/04 14:15:17 by lmajerus          #+#    #+#             */
-/*   Updated: 2024/06/04 16:34:49 by lomajeru         ###   ########.fr       */
+/*   Created: 2024/06/10 22:35:26 by ssenas-y          #+#    #+#             */
+/*   Updated: 2024/06/10 22:35:27 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 #include "builtins.h"
 #include "exec.h"
 
-int	redir(t_red *red, t_token *head)
+int	red(t_red *red, t_token *head, t_cmd c)
 {
 	int	fd;
 
+	if (c.redir_in.invalid || c.redir_out.invalid)
+		return (1);
 	if (red->file_name)
 		free(red->file_name);
 	red->file_name = ft_strdup_2(head->next->data);
@@ -32,13 +34,10 @@ int	redir(t_red *red, t_token *head)
 	else if (!ft_strncmp_2(head->data, "<", 1))
 		red->flags = O_RDONLY;
 	fd = open(red->file_name, red->flags, 0644);
-	if (fd != -1)
-		close(fd);
+	if (fd == -1)
+		return (perror(red->file_name), red->invalid = 1, 1);
 	else
-	{
-		red->invalid = 1;
-		perror(red->file_name);
-	}
+		close(fd);
 	return (0);
 }
 

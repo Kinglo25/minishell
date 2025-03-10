@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:11:49 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:11:51 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:30:29 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,33 @@ static int	exec(t_mini *shell, int i, t_pipes *p)
 	handle_dup(shell, p, i);
 	if (ft_isbuiltin(shell->cmds[i].av[0]))
 		return (ft_exec_builtin(shell, i, p->fd_out, 0));
-	cmd_path = ft_cmd_path(shell->cmds[i].av[0]);
+	cmd_path = ft_cmd_path(shell->cmds[i].av[0], shell->env);
 	execve(cmd_path, shell->cmds[i].av, shell->env);
-	perror(cmd_path);
-	return (1);
+	if (errno == 20)
+	{
+		perror(cmd_path);
+		return (126);
+	}
+	if (cmd_path[0] != '/')
+	{
+		write(2, cmd_path, ft_strlen(cmd_path));
+		write(2, ": command not found\n", 20);
+	}
+	else
+		perror(cmd_path);
+	return (127);
 }
 
 static void	handle_process(t_mini *shell, pid_t *pids, t_pipes *p, int i)
 {
 	if (pids[i] == 0)
+	{
+		signal(SIGINT, signal_handler);
 		exit(exec(shell, i, p));
+	}
 	else
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, signal_handler_parent);
 		if (i > 0)
 			close_pipe(p->old_fd);
 		if (i < shell->nb_cmd - 1)
@@ -83,19 +97,18 @@ int	wait_pids(pid_t *pids, int nb_pids)
 	return (0);
 }
 
-void	ft_exec_cmd(t_mini *shell)
+void	ft_exec_cmd(t_mini *shell, int i, pid_t *pids)
 {
-	int		i;
-	pid_t	*pids;
 	t_pipes	p;
 
 	pids = malloc(sizeof(pid_t) * shell->nb_cmd);
+	if (!pids)
+		return (ft_putstr_fd("malloc error\n", 2), ft_exit(shell, -1));
 	if (shell->nb_cmd == 1 && ft_isbuiltin(shell->cmds[0].av[0]))
 		return (exec_solo(shell, &p, 0));
-	i = -1;
 	while (++i < shell->nb_cmd)
 	{
-		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, signal_handler);
 		if (i < shell->nb_cmd - 1 && pipe(p.fd) == -1)
 		{
 			perror("pipe");

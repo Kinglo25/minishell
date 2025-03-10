@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmajerus <lmajerus@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/01 13:49:34 by lmajerus          #+#    #+#             */
-/*   Updated: 2022/03/28 16:13:05 by lmajerus         ###   ########.fr       */
+/*   Created: 2024/06/10 22:35:31 by ssenas-y          #+#    #+#             */
+/*   Updated: 2024/06/10 22:35:32 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static char	*remove_unwanted_quotes(char *str, int i, int j)
 static int	check_syntax(t_token *token)
 {
 	if (!token->next && (token->type == PIPE
-			|| token->type == REDIR_OUT || token->type == REDIR_IN))
+			|| token->type == RED_OUT || token->type == RED_IN))
 		return (0);
-	if ((token->type == REDIR_IN || token->type == REDIR_OUT)
+	if ((token->type == RED_IN || token->type == RED_OUT)
 		&& token->next && token->next->type != OTHER)
 		return (0);
 	if (token->type == PIPE && token->next && token->next->type == PIPE)
@@ -73,13 +73,13 @@ static int	identify_type(char *str, t_token *tmp)
 	if (!ft_strncmp_2(str, "|", 1))
 		return (tmp->type_size = 1, PIPE);
 	if (!ft_strncmp_2(str, ">>", 2))
-		return (tmp->type_size = 2, REDIR_OUT);
+		return (tmp->type_size = 2, RED_OUT);
 	if (!ft_strncmp_2(str, ">", 1))
-		return (tmp->type_size = 1, REDIR_OUT);
+		return (tmp->type_size = 1, RED_OUT);
 	if (!ft_strncmp_2(str, "<<", 2))
-		return (tmp->type_size = 2, REDIR_IN);
+		return (tmp->type_size = 2, RED_IN);
 	if (!ft_strncmp_2(str, "<", 1))
-		return (tmp->type_size = 1, REDIR_IN);
+		return (tmp->type_size = 1, RED_IN);
 	if (!ft_strncmp_2(str, "\t", 1))
 		return (tmp->type_size = 1, 4);
 	if (!ft_strncmp_2(str, "\n", 1))

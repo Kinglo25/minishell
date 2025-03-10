@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:12:11 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:12:13 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:30:47 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	signal_handler_heredoc(int signum)
 
 int	handle_redir(t_mini *shell, t_pipes *p, int i)
 {
+	if (shell->cmds[i].redir_in.invalid || shell->cmds[i].redir_out.invalid)
+		return (1);
 	if (shell->cmds[i].redir_in.doc)
 		handle_heredoc(shell, p, i);
 	if (shell->cmds[i].redir_in.file_name)
@@ -67,7 +69,23 @@ int	handle_redir(t_mini *shell, t_pipes *p, int i)
 	return (0);
 }
 
-char	*ft_cmd_path(char *cmd)
+char	*ft_get_env(char *env[], char *str)
+{
+	int	i;
+	int	len;
+
+	len = ft_strlen(str);
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp(str, env[i], len))
+			return (ft_substr(env[i], len, ft_strlen(env[i])));
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_cmd_path(char *cmd, char **env)
 {
 	int		i;
 	char	**split_path;
@@ -76,7 +94,7 @@ char	*ft_cmd_path(char *cmd)
 
 	if (!access(cmd, F_OK) && !access(cmd, X_OK))
 		return (cmd);
-	split_path = ft_split(getenv("PATH"), ':');
+	split_path = ft_split(ft_get_env(env, "PATH="), ':');
 	if (!split_path)
 		return (cmd);
 	tmp = ft_strjoin("/", cmd);

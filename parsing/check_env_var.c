@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_env_var.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/07 18:13:21 by lmajerus          #+#    #+#             */
-/*   Updated: 2024/06/04 16:34:08 by lomajeru         ###   ########.fr       */
+/*   Created: 2024/06/10 22:35:42 by ssenas-y          #+#    #+#             */
+/*   Updated: 2024/06/11 14:07:23 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	is_space_quotes(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n'
 		|| c == '\r' || c == '\v' || c == '\f'
-		|| c == '\'' || c == '\"');
+		|| c == '\'' || c == '\"' || c == '$');
 }
 
 static void	replace_env_var(char *str, char *new, char *var, int macro_len)

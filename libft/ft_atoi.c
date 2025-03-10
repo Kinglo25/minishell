@@ -3,48 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mtournay <mtournay@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/02 10:19:10 by mtournay          #+#    #+#             */
-/*   Updated: 2022/04/06 16:44:02 by mtournay         ###   ########.fr       */
+/*   Created: 2021/02/11 15:12:27 by lmajerus          #+#    #+#             */
+/*   Updated: 2023/11/02 13:06:28 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isspace(int c)
+static int	ft_isspace(int c)
 {
-	if ((c >= 9 && c <= 13) || c == 32)
-		return (1);
-	else
-		return (0);
+	return (c == '\t' || c == '\n' || c == '\v'
+		|| c == '\f' || c == '\r' || c == ' ');
 }
 
 int	ft_atoi(const char *str)
 {
-	unsigned long long int	nbr;
-	int						minus;
-	int						i;
+	int				i;
+	int				sign;
+	unsigned long	ans;
+	unsigned long	cutoff;
 
-	nbr = 0;
-	minus = 1;
+	sign = 1;
 	i = 0;
 	while (ft_isspace(str[i]))
 		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
+	if (str[i] == '-' || str[i] == '+')
 		if (str[i++] == '-')
-			minus = -1;
-	}
-	while (ft_isdigit(str[i]))
+			sign *= -1;
+	if (sign < 0)
+		cutoff = (unsigned long)-(LONG_MIN + LONG_MAX) + LONG_MAX;
+	else
+		cutoff = LONG_MAX;
+	ans = 0;
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		nbr += str[i++] - 48;
-		if (ft_isdigit(str[i]))
-			nbr *= 10;
+		if (ans > cutoff / 10 || (ans == cutoff / 10
+				&& (unsigned long)str[i] - 48 > cutoff % 10))
+			return (cutoff);
+		ans = ans * 10 + (str[i++] - '0');
 	}
-	if ((nbr > 9223372036854775807ull && minus > 0) || (minus > 0 && i > 19))
-		return (-1);
-	else if ((nbr > 9223372036854775808ull && minus < 0) || i > 19)
-		return (0);
-	return (nbr * minus);
+	return (ans * sign);
 }

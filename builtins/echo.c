@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:10:14 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:10:15 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:29:57 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static void	ft_echo_process(char **cmd, int i, int j, int pfd)
 {
 	while (cmd[i][j])
 	{
-		if (cmd[i][j] == '\\' && cmd[i][j + 1] == '\\' && cmd[i][j + 2] == 'n')
+		if (cmd[i][j] == '\\' && cmd[i][j + 1] == '\\'
+			&& cmd[i][j + 2] == 'n')
 		{
 			write(pfd, "\n", 1);
 			j += 2;

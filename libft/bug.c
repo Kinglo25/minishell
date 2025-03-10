@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop.c                                             :+:      :+:    :+:   */
+/*   bug.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lalex-ku <lalex-ku@42sp.org.br>            +#+  +:+       +#+        */
+/*   By: lomajeru <lomajeru@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/22 17:32:45 by lalex-ku          #+#    #+#             */
-/*   Updated: 2022/06/22 17:32:50 by lalex-ku         ###   ########.fr       */
+/*   Created: 2023/11/14 11:21:39 by lomajeru          #+#    #+#             */
+/*   Updated: 2024/06/05 13:34:28 by lomajeru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
 #include <stdio.h>
-#include <unistd.h>
 
-int	main(int argc, char const *argv[])
+void	bug(double n)
 {
-	int	pid;
+	static int	x;
 
-	pid = fork();
-	open("infile", O_RDONLY);
-	while (1)
-	{
-		printf("Helloo miniHELL %i\n", pid);
-		sleep(1);
-	}
-	return (0);
+	fprintf(stderr, "%i. %g\n", x, n);
 }

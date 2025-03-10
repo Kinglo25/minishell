@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:11:37 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:11:40 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/11 00:36:03 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_exec_builtin(t_mini *shell, int i, int pfd, int solo)
 	if (!ft_strncmp(shell->cmds[i].av[0], "echo", 5))
 		return (ft_echo(shell->cmds[i].av, pfd));
 	if (!ft_strncmp(shell->cmds[i].av[0], "cd", 3))
-		return (ft_cd(shell->cmds[i].av));
+		return (ft_cd(shell->cmds[i].av, shell->env));
 	if (!ft_strncmp(shell->cmds[i].av[0], "pwd", 4))
 		return (ft_pwd(pfd));
 	if (!ft_strncmp(shell->cmds[i].av[0], "export", 7))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ssenas-y <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ssenas-y <ssenas-y@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 16:11:09 by ssenas-y          #+#    #+#             */
-/*   Updated: 2024/06/04 16:11:11 by ssenas-y         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:30:13 by ssenas-y         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ char	**env_realloc(char **env, char *var, size_t size)
 	char	**new;
 	int		i;
 
-	i = -1;
 	new = malloc(size * sizeof(char *));
 	if (!new)
 		return (NULL);
+	i = -1;
 	while (env[++i])
 	{
 		new[i] = ft_strdup(env[i]);
@@ -93,12 +93,41 @@ char	**env_realloc(char **env, char *var, size_t size)
 	return (new);
 }
 
+void	print_sorted_env(char **env)
+{
+	int		i;
+	int		j;
+	int		k;
+	char	**cpy;
+
+	cpy = env_dup(env);
+	i = 0;
+	while (cpy[i])
+	{
+		j = i + 1;
+		while (cpy[j])
+		{
+			k = 0;
+			while (cpy[i][k] == cpy[j][k])
+				k++;
+			if ((cpy[i][k] != '=' && cpy[i][k] > cpy[j][k]) || cpy[j][k] == '=')
+				ft_switch(&cpy[i], &cpy[j]);
+			j++;
+		}
+		i++;
+	}
+	print_cpy(cpy);
+	free(cpy);
+}
+
 int	ft_export(char ***env, char **cmd)
 {
 	int	env_count;
 	int	ret;
 	int	i;
 
+	if (!cmd[1])
+		print_sorted_env(*env);
 	i = 0;
 	while (cmd[++i])
 	{
@@ -111,11 +140,9 @@ int	ft_export(char ***env, char **cmd)
 				return (0);
 			else
 			{
-				env_count = 0;
-				while ((*env)[env_count] != NULL)
-					env_count++;
-				*env = env_realloc(*env, cmd[i], sizeof(char *)
-						* (env_count + 2));
+				env_count = ft_env_count(*env);
+				*env = env_realloc(*env, cmd[i],
+						sizeof(char *) * (env_count + 2));
 			}
 		}
 	}
