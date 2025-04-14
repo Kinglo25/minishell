@@ -1,113 +1,176 @@
-Project Minishell - 42 School
-The Minishell project is a foundational exercise in systems programming at 42 School, challenging students to build a simplified Unix shell. It teaches core concepts like process execution, environment management, signal handling, and command parsing, mirroring the behavior of real-world shells (e.g., bash, zsh). This project emphasizes understanding how shells interact with the operating system kernel and user input.
-Core Objective
+# Minishell
 
-Create a minimalistic shell that can interpret and execute user commands, including built-in functions, pipes, redirections, and environment variables. The shell must handle process creation, job control, and errors gracefully while adhering to POSIX standards.
-Key Requirements
+_minishell_ is a School 42 project that challenges you to create a simplified Unix shell. The project requires you to build a command-line interpreter in C, supporting built-in commands, external command execution, piping, redirection, and environment variable management. This project reinforces your understanding of system calls, process management, and low-level programming in a Unix environment.
 
-    Basic Functionality:
+---
 
-        Execute commands from PATH (e.g., /bin/ls, grep).
+## Table of Contents
 
-        Handle pipes (|), input/output redirections (<, >, >>), and heredoc (<<).
+- [Introduction](#introduction)
+- [Project Description](#project-description)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [Author](#author)
+- [License](#license)
 
-        Manage environment variables (e.g., $PATH, $HOME) and expand $VAR in commands.
+---
 
-    Built-in Commands:
-    Implement essential shell built-ins:
+## Introduction
 
-        echo (with -n flag).
+The _minishell_ project focuses on creating a basic shell that can interpret and execute commands entered by the user. This includes handling built-in commands (such as `cd`, `echo`, and `exit`), executing external programs, and managing features like piping and redirection. Through this project, you'll gain valuable insights into process control, file descriptors, and the intricacies of system-level programming.
 
-        cd (change directory).
+---
 
-        pwd (print working directory).
+## Project Description
 
-        export (set environment variables).
+In _minishell_, you will develop a custom shell that mimics the functionality of a typical Unix shell, albeit on a smaller scale. The project includes:
 
-        unset (remove environment variables).
+- **Command Parsing:** Breaking down the user input into executable commands and arguments.
+- **Execution:** Creating child processes to execute external commands using system calls (e.g., `fork()`, `execve()`).
+- **Built-in Commands:** Implementing commands that are part of the shell itself (e.g., `cd`, `export`, `unset`, `echo`, and `exit`).
+- **I/O Redirection & Piping:** Allowing the user to redirect input/output and pipe commands together.
+- **Environment Variables:** Managing and utilizing environment variables during shell execution.
 
-        env (list environment variables).
+The project’s modular design should help you separate the concerns of parsing, execution, and built-in functionalities for easier management and scalability.
 
-        exit (terminate the shell with optional status code).
+---
 
-    Signal Handling:
+## Features
 
-        Respond to Ctrl+C (SIGINT) and Ctrl+\ (SIGQUIT) by interrupting or killing processes.
+- **Interactive Shell:** A prompt-based interactive shell that reads user commands.
+- **Built-in Commands:** Implementation of shell built-in functions for navigation and environment management.
+- **External Command Execution:** Supports launching external programs and handling their outputs.
+- **Redirection & Piping:** Manage standard input, output, error redirections, and command piping.
+- **Error Handling:** Displays relevant error messages for invalid commands or execution failures.
+- **Signal Handling:** Manages signals (such as `CTRL+C` and `CTRL+D`) gracefully without crashing the shell.
 
-        Prevent termination of the shell itself with Ctrl+C during command execution.
+---
 
-    Error Handling:
+## Prerequisites
 
-        Display meaningful errors (e.g., command not found, syntax error).
+Before building and running _minishell_, ensure you have the following:
 
-        Handle invalid permissions, missing files, and memory leaks.
+- A C compiler (e.g., `gcc` or `clang`)
+- [Make](https://www.gnu.org/software/make/) for build automation
+- A Unix/Linux or macOS environment (the project relies on Unix system calls)
+- Basic knowledge of C programming, system calls, and Unix process management
 
-Technical Implementation
+---
 
-    Lexing & Parsing:
+## Installation
 
-        Split input into tokens (commands, arguments, operators).
+Follow these steps to clone, build, and run the project:
 
-        Resolve ambiguities (e.g., quotes "...", escaping \).
+1. **Clone the Repository:**
 
-        Build an abstract syntax tree (AST) to represent command pipelines and redirections.
+   ```bash
+   git clone https://github.com/Kinglo25/minishell.git
+   cd minishell
+   ```
 
-    Process Execution:
+2. **Build the Project:**
 
-        Use fork(), execve(), and waitpid() to launch processes.
+   Use the provided Makefile to clean any previous builds and compile the project:
 
-        Manage file descriptors for pipes and redirections (dup2, pipe, open).
+   ```bash
+   make fclean
+   make
+   ```
 
-        Handle built-in commands in the parent process (no fork() needed).
+3. **Verify the Build:**
 
-    Signals:
+   Run your custom shell to ensure it starts correctly:
 
-        Override default signal handlers using signal() or sigaction().
+   ```bash
+   ./minishell
+   ```
 
-        Ensure foreground/background process control (e.g., Ctrl+Z for SIGTSTP in bonus).
+   You should see a shell prompt where you can start entering commands.
 
-    Memory Management:
+---
 
-        Avoid leaks with careful allocation/freeing of command structures.
+## Usage
 
-        Use tools like valgrind to debug memory issues.
+Once built, you can run _minishell_ by executing the compiled binary:
 
-Bonus Extensions
+```bash
+./minishell
+```
 
-Optional advanced features to deepen understanding:
+**Basic Usage:**
 
-    Job Control:
+- **Executing Commands:**  
+  Simply type any Unix command (e.g., `ls`, `pwd`, `echo Hello, World!`) and press Enter.
 
-        Implement & for background processes.
+- **Built-in Commands:**  
+  Use built-in commands like `cd` to change directories, `export` to manage environment variables, and `exit` to close the shell.
 
-        Add fg, bg, and jobs commands to manage suspended jobs.
+- **Piping & Redirection:**  
+  You can pipe commands together or redirect input/output, for example:
+  ```bash
+  ls -l | grep minishell > output.txt
+  ```
 
-    Logical Operators:
+- **Signal Handling:**  
+  Use `CTRL+C` to interrupt a running command, and `CTRL+D` to exit the shell (if no command is being entered).
 
-        Support && (and) and || (or) between commands.
+---
 
-    Wildcards:
+## Troubleshooting
 
-        Expand * wildcards in filenames (e.g., ls *.c).
+- **Compilation Errors:**  
+  Ensure all necessary headers and libraries are available on your system. Verify that your compiler supports the required Unix system calls.
 
-    Subshells:
+- **Command Not Found:**  
+  Check that the command exists in your system’s PATH. For built-in commands, review your implementation if they are not recognized.
 
-        Handle commands in parentheses (echo "hello" && ls).
+- **Redirection/Pipe Issues:**  
+  Validate your parsing and management of file descriptors. Use debugging tools or print statements to trace the execution flow.
 
-    History:
+- **Unexpected Shell Behavior:**  
+  Verify signal handling and memory management. Running your program through tools like Valgrind can help identify memory leaks and errors.
 
-        Save and recall command history (e.g., !!, !n).
+For additional support, refer to your project documentation, consult with peers, or discuss issues with instructors at School 42.
 
-Learning Outcomes
+---
 
-    Process Management: Mastery of fork(), execve(), and process synchronization.
+## Contributing
 
-    File Descriptors: Understanding redirections, pipes, and I/O manipulation.
+Contributions and suggestions for _minishell_ are welcome! To contribute:
 
-    Parsing Techniques: Writing robust lexers/parsers for complex input.
+1. Fork the repository.
+2. Create a new branch for your changes:
+   ```bash
+   git checkout -b feature/my-new-feature
+   ```
+3. Make your modifications, following the coding standards set by School 42.
+4. Commit your changes with clear and descriptive commit messages.
+5. Push your branch:
+   ```bash
+   git push origin feature/my-new-feature
+   ```
+6. Open a pull request for review.
 
-    Signal Handling: Graceful interruption and process control.
+Your contributions help improve the project and benefit the learning community!
 
-    Shell Internals: Insight into how shells interface with the OS kernel.
+---
 
-Minishell is a pivotal project for aspiring systems programmers, bridging theoretical OS concepts with real-world application. It demands meticulous attention to edge cases, memory safety, and POSIX compliance, preparing students for advanced work in operating systems and embedded systems.
+## Author
+
+- **Kinglo25**  
+  [GitHub: Kinglo25](https://github.com/Kinglo25)
+
+Developed as part of the School 42 curriculum.
+
+---
+
+## License
+
+Distributed under the MIT License. See the `LICENSE` file for details.
+```
+
+---
